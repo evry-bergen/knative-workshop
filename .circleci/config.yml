@@ -142,7 +142,7 @@ jobs:
       - persist_to_workspace:
           root: *working_directory
           paths:
-            - terraform.plan
+            - terraform/terraform.plan
 
   apply:
     <<: *apply_job
