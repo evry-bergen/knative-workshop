@@ -1,0 +1,171 @@
+version: 2
+
+references:
+
+base_image: &base_image
+  hashicorp/terraform:light
+
+working_directory: &working_directory
+  ~/terraform
+
+default_config: &default_config
+  docker:
+    - image: *base_image
+  working_directory: *working_directory
+  environment:
+    BASH_ENV: /root/.bashrc
+
+repo_cache_key: &repo_cache_key
+  v1-repo-{{ .Branch }}-{{ .Revision }}
+
+# Step to restore repository from cache
+restore_repo: &restore_repo
+  restore_cache:
+    key: *repo_cache_key
+
+save_repo: &save_repo
+  save_cache:
+    key: *repo_cache_key
+    paths:
+      - *working_directory
+
+set_terraform_environment: &set_terraform_environment
+  run:
+    name: set terraform environment
+    command: |
+      cd && touch $BASH_ENV
+      echo 'export TERRAFORM_ENVIRONMENT=prod' >> $BASH_ENV
+
+      #if [ "${CIRCLE_BRANCH}" == "master" ]; then
+      #  echo 'export TERRAFORM_ENVIRONMENT=prod' >> $BASH_ENV
+      #else
+      #  echo 'export TERRAFORM_ENVIRONMENT=dev' >> $BASH_ENV
+      #fi
+
+terraform_init: &terraform_init
+  run:
+    name: terraform init
+    command: |
+      source $BASH_ENV
+      terraform init -backend-config="bucket=$TERRAFORM_STATE_GCP_BUCKET"
+      terraform workspace select $TERRAFORM_ENVIRONMENT
+
+tfnotify_install: &tfnotify_install
+  run:
+    name: tfnotify install
+    command: |
+      curl -vOL https://github.com/mercari/tfnotify/releases/download/v0.2.0/tfnotify_v0.2.0_linux_amd64.tar.gz
+      tar -xzvf tfnotify_v0.2.0_linux_amd64.tar.gz
+      mv tfnotify_v0.2.0_linux_amd64/tfnotify /usr/local/bin
+      rm -rf tfnotify_v0.2.0_linux_amd64*
+
+helm_install: &helm_install
+  run:
+    name: helm install
+    command: |
+      curl -vOL https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz
+      tar -xzvf helm-v2.11.0-linux-amd64.tar.gz
+      mv linux-amd64/helm /usr/local/bin
+      rm -rf linux-amd64 helm-v2.11.0-linux-amd64.tar.gz
+
+helm_init: &helm_init
+  run:
+    name: helm init
+    command: helm init --client-only
+
+apply_job: &apply_job
+  <<: *default_config
+  steps:
+    - *restore_repo
+    - *set_terraform_environment
+    - *terraform_init
+    - *helm_install
+    - *helm_init
+    - attach_workspace:
+        at: *working_directory
+    - run:
+        name: terraform apply
+        command: |
+          source $BASH_ENV
+          terraform apply \
+            --auto-approve \
+            terraform.plan
+jobs:
+  lint:
+    <<: *default_config
+    steps:
+      - checkout
+      - *set_terraform_environment
+      - run:
+          name: terraform fmt
+          command: |
+            source $BASH_ENV
+            if [ $(terraform fmt | grep -v .terraform | tee fmt_result.txt | wc -l) -gt 0 ]; then
+              echo "Terraform files require syntax reformating:"
+              echo
+              cat fmt_result.txt
+              rm fmt_result.txt
+              git checkout -- .
+              echo
+              echo "Please run terraform fmt"
+              exit 1
+            fi
+      - *save_repo
+
+  plan:
+    <<: *default_config
+    steps:
+      - *restore_repo
+      - *set_terraform_environment
+      - *terraform_init
+      - *tfnotify_install
+      - *helm_install
+      - *helm_init
+      - run:
+          name: terraform plan
+          command: |
+            source $BASH_ENV
+            terraform plan \
+              -var-file=env/$TERRAFORM_ENVIRONMENT/settings.tfvars \
+              -out=terraform.plan
+      - run:
+          name: tfnotify plan
+          command: terraform plan terraform.plan | tfnotify plan
+
+      - persist_to_workspace:
+          root: *working_directory
+          paths:
+            - terraform.plan
+
+  apply:
+    <<: *apply_job
+  #apply-with-approval:
+  #  <<: *apply_job
+
+workflows:
+  version: 2
+  lint_plan_apply:
+    jobs:
+      - lint
+      - plan:
+          requires:
+            - lint
+      #- approve:
+      #    type: approval
+      #    requires:
+      #      - plan
+      #    filters:
+      #      branches:
+      #        only: master
+      #- apply-with-approval:
+      #    requires:
+      #      - approve
+      #    filters:
+      #      branches:
+      #        only: master
+      - apply:
+          requires:
+            - plan
+          filters:
+            branches:
+              only: master
