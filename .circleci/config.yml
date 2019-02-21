@@ -130,7 +130,7 @@ jobs:
             source $BASH_ENV
             cd terraform
             terraform plan \
-              -var-file=env/$TERRAFORM_ENVIRONMENT/settings.tfvars \
+              -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars \
               -out=terraform.plan
       - run:
           name: tfnotify plan
