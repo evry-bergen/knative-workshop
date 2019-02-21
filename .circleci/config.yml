@@ -6,7 +6,7 @@ base_image: &base_image
   hashicorp/terraform:light
 
 working_directory: &working_directory
-  ~/terraform
+  ~/project
 
 default_config: &default_config
   docker:
@@ -47,6 +47,7 @@ terraform_init: &terraform_init
     name: terraform init
     command: |
       source $BASH_ENV
+      cd terraform
       terraform init -backend-config="bucket=$TERRAFORM_STATE_GCP_BUCKET"
       terraform workspace select $TERRAFORM_ENVIRONMENT
 
@@ -87,6 +88,7 @@ apply_job: &apply_job
         name: terraform apply
         command: |
           source $BASH_ENV
+          cd terraform
           terraform apply \
             --auto-approve \
             terraform.plan
@@ -100,6 +102,7 @@ jobs:
           name: terraform fmt
           command: |
             source $BASH_ENV
+            cd terraform
             if [ $(terraform fmt | grep -v .terraform | tee fmt_result.txt | wc -l) -gt 0 ]; then
               echo "Terraform files require syntax reformating:"
               echo
@@ -125,12 +128,16 @@ jobs:
           name: terraform plan
           command: |
             source $BASH_ENV
+            cd terraform
             terraform plan \
               -var-file=env/$TERRAFORM_ENVIRONMENT/settings.tfvars \
               -out=terraform.plan
       - run:
           name: tfnotify plan
-          command: terraform plan terraform.plan | tfnotify plan
+          command: |
+            source $BASH_ENV
+            cd terraform
+            terraform plan terraform.plan | tfnotify plan
 
       - persist_to_workspace:
           root: *working_directory
