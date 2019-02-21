@@ -149,6 +149,19 @@ jobs:
   #apply-with-approval:
   #  <<: *apply_job
 
+  destroy:
+    <<: *default_config
+    steps:
+      - *restore_repo
+      - *set_terraform_environment
+      - *terraform_init
+      - run:
+          name: terraform destroy
+          command: |
+            source $BASH_ENV
+            cd terraform
+            terraform destroy -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars
+
 workflows:
   version: 2
   lint_plan_apply:
@@ -176,3 +189,13 @@ workflows:
           filters:
             branches:
               only: master
+  cleanup:
+    triggers:
+      - schedule:
+          cron: "0 2 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - destroy
