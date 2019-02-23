@@ -160,7 +160,7 @@ jobs:
           command: |
             source $BASH_ENV
             cd terraform
-            terraform destroy -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars
+            terraform destroy -auto-approve -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars
 
 workflows:
   version: 2
