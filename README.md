@@ -56,3 +56,39 @@ kubectl apply --filename https://github.com/knative/serving/releases/download/v0
 --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
 --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
 ```
+
+## Known Bugs
+
+**Pod Init:CrashLoopBackOff**
+
+```
+$ kubectl get pods -n knative-moitoring
+
+NAME                                  READY     STATUS                  RESTARTS   AGE       IP
+grafana-754bc795bb-jvtlk              0/2       Init:CrashLoopBackOff   6          11m       10.2.2.6
+kube-state-metrics-689bcd6589-wfsgd   0/5       Init:Error              7          11m       10.2.2.5
+```
+
+Due to limitations with istio-init and pod security policies not all pods will
+be able to start correctly when Istio is enabled. A common error from the
+`istio-init` contianer is the following:
+
+```
+$ kubectl get logs grafana-754bc795bb-jvtlk -n knative-monitoring -c istio-init -f
+
+iptables v1.6.0: can't initialize iptables table `nat': Permission denied (you must be root)
+```
+
+The solution is to patch the `grafana` (and other failing deployments),
+commenting out the security-context like this:
+
+```
+$ kubectl edit deploy kube-state-metrics -n knative-monitoring
+
+securityContext: {}
+```
+
+Source:
+* https://groups.google.com/forum/#!topic/istio-users/MPek-mO-JXM
+* https://github.com/istio/istio/issues/10358
+* https://github.com/istio/old_issues_repo/issues/172
