@@ -30,7 +30,7 @@ variable "max_node_count" {
 
 variable "node_machine_type" {
   description = "GCE machine type"
-  default     = "n1-standard-2"
+  default     = "n1-standard-4"
 }
 
 variable "node_preemptible" {
