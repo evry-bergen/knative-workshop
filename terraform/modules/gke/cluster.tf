@@ -50,16 +50,6 @@ resource "google_container_cluster" "cluster" {
     cluster_ipv4_cidr_block = "10.2.0.0/19"
   }
 
-  addons_config {
-    istio_config {
-      disabled = false
-    }
-
-    cloudrun_config {
-      disabled = false
-    }
-  }
-
   resource_labels {
     created-with = "terraform"
   }
