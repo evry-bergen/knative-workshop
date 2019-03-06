@@ -51,13 +51,8 @@ resource "google_container_cluster" "cluster" {
   }
 
   addons_config {
-    #istio_config {
-    #  disabled = false
-    #}
-
-    #cloudrun_config {
-    #  disabled = false
-    #}
+    #istio_config {  #  disabled = false  #}
+    #cloudrun_config {  #  disabled = false  #}
   }
 
   resource_labels {
