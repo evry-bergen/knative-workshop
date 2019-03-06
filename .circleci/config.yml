@@ -170,7 +170,7 @@ jobs:
       - run:
           name: kubectl init
           command: |
-            gcloud container clusters get-credentials {GKE_CLUSTER_NAME}
+            gcloud container clusters get-credentials ${GKE_CLUSTER_NAME}
 
       - run:
           name: set clusterrole
