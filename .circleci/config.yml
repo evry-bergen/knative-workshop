@@ -36,11 +36,17 @@ set_terraform_environment: &set_terraform_environment
       cd && touch $BASH_ENV
       echo 'export TERRAFORM_ENVIRONMENT=prod' >> $BASH_ENV
 
-      #if [ "${CIRCLE_BRANCH}" == "master" ]; then
-      #  echo 'export TERRAFORM_ENVIRONMENT=prod' >> $BASH_ENV
-      #else
-      #  echo 'export TERRAFORM_ENVIRONMENT=dev' >> $BASH_ENV
-      #fi
+set_gcloud_environment: &set_gcloud_environment
+  run:
+    name: set gcloud environment
+    command: |
+      cd && touch $BASH_ENV
+
+      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+        echo 'export KUBECTL_DRYRUN=false' >> $BASH_ENV
+      else
+        echo 'export KUBECTL_DRYRUN=false' >> $BASH_ENV
+      fi
 
 terraform_init: &terraform_init
   run:
@@ -146,8 +152,47 @@ jobs:
 
   apply:
     <<: *apply_job
-  #apply-with-approval:
-  #  <<: *apply_job
+
+  gcloud:
+    <<: *default_config
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - *restore_repo
+      - *set_gcloud_environment
+      - run:
+          name: gcloud init
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+
+      - run:
+          name: set clusterrole
+          command: |
+            kubectl create clusterrolebinding cluster-sa-binding \
+            --clusterrole=cluster-admin \
+            --user=$(gcloud config get-value core/account) \
+            --dry-run=${KUBECTL_DRYRUN}|| true
+
+      - run:
+          name: install istio
+          command: |
+            kubectl apply --wait --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
+            kubectl apply --wait --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
+            kubectl label namespace default istio-injection=enabled
+
+      - run:
+          name: install knative
+          command: |
+            kubectl apply --wait --dry-run=${KUBECTL_DRYRUN} \
+              --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
+              --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
+              --filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
+              --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
+              --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
+              --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
+              --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
 
   destroy:
     <<: *default_config
@@ -168,27 +213,26 @@ workflows:
     jobs:
       - lint
       - plan:
-          requires:
-            - lint
-      #- approve:
-      #    type: approval
-      #    requires:
-      #      - plan
-      #    filters:
-      #      branches:
-      #        only: master
-      #- apply-with-approval:
-      #    requires:
-      #      - approve
-      #    filters:
-      #      branches:
-      #        only: master
+          requires: [lint]
+
+      - gcloud:
+          requires: [plan]
+          filters:
+            branches:
+              ignore: master
+
       - apply:
-          requires:
-            - plan
+          requires: [plan]
           filters:
             branches:
               only: master
+
+      - gcloud:
+          requires: [apply]
+          filters:
+            branches:
+              only: master
+
   cleanup:
     triggers:
       - schedule:
