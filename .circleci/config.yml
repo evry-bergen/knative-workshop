@@ -183,14 +183,14 @@ jobs:
       - run:
           name: install istio
           command: |
-            kubectl apply --wait --overwrite=true --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
-            kubectl apply --wait --overwrite=true --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
-            kubectl label namespace default istio-injection=enabled
+            kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
+            kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
+            kubectl label --overwrite=true --dry-run=${KUBECTL_DRYRUN} namespace default istio-injection=enabled
 
       - run:
           name: install knative
           command: |
-            kubectl apply --wait --overwrite=true --dry-run=${KUBECTL_DRYRUN} \
+            kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait \
               --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
               --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
               --filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
