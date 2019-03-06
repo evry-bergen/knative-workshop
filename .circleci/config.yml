@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 
 references:
 
@@ -213,7 +213,7 @@ jobs:
             terraform destroy -auto-approve -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars
 
 workflows:
-  version: 2.1
+  version: 2
   lint_plan_apply:
     jobs:
       - lint
