@@ -213,7 +213,7 @@ jobs:
             terraform destroy -auto-approve -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars
 
 workflows:
-  version: 2
+  version: 2.1
   lint_plan_apply:
     jobs:
       - lint
@@ -232,11 +232,11 @@ workflows:
             branches:
               only: master
 
-      - gcloud:
-          requires: [apply]
-          filters:
-            branches:
-              only: master
+      #- gcloud:
+      #    requires: [apply]
+      #    filters:
+      #      branches:
+      #        only: master
 
   cleanup:
     triggers:
