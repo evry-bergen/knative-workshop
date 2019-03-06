@@ -33,6 +33,12 @@ kubectl create clusterrolebinding cluster-admin-binding \
 --user=$(gcloud config get-value core/account)
 ```
 
+4. Delete the existing Istio authentication policy:
+
+```
+kubectl delete meshpolicies.authentication.istio.io default
+```
+
 4. Label the default namespace with `istio-injection=enabled`:
 
 ```
