@@ -168,12 +168,17 @@ jobs:
             gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
 
       - run:
+          name: kubectl init
+          command: |
+            gcloud container clusters get-credentials {GKE_CLUSTER_NAME}
+
+      - run:
           name: set clusterrole
           command: |
             kubectl create clusterrolebinding cluster-sa-binding \
             --clusterrole=cluster-admin \
             --user=$(gcloud config get-value core/account) \
-            --dry-run=${KUBECTL_DRYRUN}|| true
+            --dry-run=${KUBECTL_DRYRUN} || true
 
       - run:
           name: install istio
