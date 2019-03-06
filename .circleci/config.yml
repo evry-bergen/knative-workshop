@@ -222,9 +222,6 @@ workflows:
 
       - gcloud:
           requires: [plan]
-          filters:
-            branches:
-              ignore: [master]
 
       - apply:
           requires: [plan]
