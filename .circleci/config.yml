@@ -153,7 +153,7 @@ jobs:
   apply:
     <<: *apply_job
 
-  gcloud:
+  gcloud_dryrun: &gcloud_dryrun
     <<: *default_config
     docker:
       - image: google/cloud-sdk
@@ -199,6 +199,9 @@ jobs:
               --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
               --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
 
+  gcloud_apply:
+    <<: *gcloud_dryrun
+
   destroy:
     <<: *default_config
     steps:
@@ -220,7 +223,7 @@ workflows:
       - plan:
           requires: [lint]
 
-      - gcloud:
+      - gcloud_dryrun:
           requires: [plan]
           filters:
             branches:
@@ -232,7 +235,7 @@ workflows:
             branches:
               only: master
 
-      - gcloud:
+      - gcloud_apply:
           requires: [apply]
 
   cleanup:
