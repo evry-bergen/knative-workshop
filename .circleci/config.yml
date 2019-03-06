@@ -224,7 +224,7 @@ workflows:
           requires: [plan]
           filters:
             branches:
-              ignore: master
+              ignore: [master]
 
       - apply:
           requires: [plan]
