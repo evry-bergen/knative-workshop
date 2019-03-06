@@ -232,11 +232,8 @@ workflows:
             branches:
               only: master
 
-      #- gcloud:
-      #    requires: [apply]
-      #    filters:
-      #      branches:
-      #        only: master
+      - gcloud:
+          requires: [apply]
 
   cleanup:
     triggers:
