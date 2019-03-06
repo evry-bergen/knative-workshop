@@ -183,8 +183,8 @@ jobs:
       - run:
           name: install istio
           command: |
-            kubectl apply --wait --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
-            kubectl apply --wait --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
+            kubectl apply --wait --overwrite --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
+            kubectl apply --wait --overwrite --dry-run=${KUBECTL_DRYRUN} -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
             kubectl label namespace default istio-injection=enabled
 
       - run:
