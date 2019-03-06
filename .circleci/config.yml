@@ -45,7 +45,7 @@ set_gcloud_environment: &set_gcloud_environment
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
         echo 'export KUBECTL_DRYRUN=false' >> $BASH_ENV
       else
-        echo 'export KUBECTL_DRYRUN=false' >> $BASH_ENV
+        echo 'export KUBECTL_DRYRUN=true' >> $BASH_ENV
       fi
 
 terraform_init: &terraform_init
