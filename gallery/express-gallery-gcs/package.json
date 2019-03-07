@@ -1,0 +1,76 @@
+{
+  "_from": "express-photo-gallery",
+  "_id": "express-photo-gallery@1.0.9",
+  "_inBundle": false,
+  "_integrity": "sha1-ox+01ssOhlYuaPjFK2Y651eb8sU=",
+  "_location": "/express-photo-gallery",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "express-photo-gallery",
+    "name": "express-photo-gallery",
+    "escapedName": "express-photo-gallery",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/express-photo-gallery/-/express-photo-gallery-1.0.9.tgz",
+  "_shasum": "a31fb4d6cb0e86562e68f8c52b663ae7579bf2c5",
+  "_spec": "express-photo-gallery",
+  "_where": "/Users/oyvindranda/Documents/Projects/booster/lab1",
+  "author": {
+    "name": "timmydoza",
+    "email": "timmydoza@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/timmydoza/express-photo-gallery/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "deep-equal": "^1.0.1",
+    "directory-exists": "^1.0.1",
+    "lg-fullscreen": "^1.0.1",
+    "lg-thumbnail": "^1.0.3",
+    "lg-zoom": "^1.0.4",
+    "lightgallery": "^1.3.9",
+    "mustache": "^2.3.0",
+    "object-assign": "^4.1.1",
+    "request": "^2.81.0",
+    "router": "^1.3.0",
+    "serve-static": "^1.12.1",
+    "xml2js": "^0.4.17"
+  },
+  "deprecated": false,
+  "description": "Express middleware which serves a stylish and responsive photo gallery using jQuery lightgallery.",
+  "devDependencies": {
+    "async": "^2.3.0",
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "express": "^4.15.2",
+    "mocha": "^3.2.0"
+  },
+  "homepage": "https://github.com/timmydoza/express-photo-gallery#readme",
+  "keywords": [
+    "photo",
+    "photos",
+    "lightgallery",
+    "gallery",
+    "photogallery"
+  ],
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "name": "express-photo-gallery",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timmydoza/express-photo-gallery.git"
+  },
+  "scripts": {
+    "test": "mocha -t 4000"
+  },
+  "version": "1.0.9"
+}
