@@ -1,4 +1,4 @@
-# Lab 0: Knative Install
+# Lab 0: Knative Setup
 
 This guide walks you through the installation of the latest version of all
 Knative components using pre-built images.
@@ -215,7 +215,7 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 
 ---
 
-<p align="right"><a href="../1-hello-world">Lab 1: Hello World➡️</a></p>
+<p align="right"><a href="../1-serve">Lab 1: Knative Serve →</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
 [Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed

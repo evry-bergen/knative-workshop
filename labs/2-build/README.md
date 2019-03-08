@@ -1,4 +1,4 @@
-# Lab 2: Build with Knative
+# Lab 2: Knative Build
 
 A Go sample that shows how to use Knative to go from source code in a git
 repository to a running application with a URL.
@@ -254,7 +254,7 @@ kubectl delete --filename service.yaml
 
 ---
 
-<p align="left"><a href="../1-hello-world">← Lab 1: Hello World</a></p>
+<p align="left"><a href="../1-serve">← Lab 1: Knative Serve</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
 [Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed

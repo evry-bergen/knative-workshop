@@ -1,4 +1,4 @@
-# Lab 1: Hello World
+# Lab 1: Knative Serve
 
 This guide shows you how to deploy an app using Knative, then interact with it
 using cURL requests.
