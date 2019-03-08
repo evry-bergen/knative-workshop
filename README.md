@@ -45,6 +45,16 @@ The following Knative components are available:
 [knative-serving]: https://www.knative.dev/docs/serving/
 [knative-eventing]: https://www.knative.dev/docs/eventing/
 
+## Prerequisite
+
+* [Google Cloud Account (free trial)][gloud-free]
+* [Google Cloud CLI `gcloud` installed][gcloud-cli]
+* [Kubernetes CLI `kubectl` installed][kubectl-cli]
+
+[gloud-free]: https://cloud.google.com/free/
+[gloud-cli]: https://cloud.google.com/sdk/docs/#install_the_latest_cloud_tools_version_cloudsdk_current_version
+[kubectl-cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
+
 ## Labs
 
 0. [Knative Setup](./labs/0-setup)
