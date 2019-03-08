@@ -7,6 +7,9 @@ This lab assignment uses the [Build][knative-build] and
 [Serving][knative-serving] components of Knative to orchestrate an end-to-end
 deployment.
 
+[knative-build]: https://www.knative.dev/docs/build/
+[knative-serving]: https://www.knative.dev/docs/serving/
+
 ### Register secrets for Contianer Registry
 
 In order to push the container that is built from source to Docker Hub, register
@@ -212,20 +215,10 @@ container for the application.
    address:
 
    ```shell
-   # In Knative 0.2.x and prior versions, the `knative-ingressgateway` service was used instead of `istio-ingressgateway`.
-   INGRESSGATEWAY=knative-ingressgateway
+   kubectl get svc istio-ingressgateway --namespace istio-system
 
-   # The use of `knative-ingressgateway` is deprecated in Knative v0.3.x.
-   # Use `istio-ingressgateway` instead, since `knative-ingressgateway`
-   # will be removed in Knative v0.4.
-   if kubectl get configmap config-istio -n knative-serving &> /dev/null; then
-       INGRESSGATEWAY=istio-ingressgateway
-   fi
-
-   kubectl get svc $INGRESSGATEWAY --namespace istio-system
-
-   NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                                      AGE
-   xxxxxxx-ingressgateway   LoadBalancer   10.23.247.74   35.203.155.229   80:32380/TCP,443:32390/TCP,32400:32400/TCP   2d
+   NAME                   TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                                      AGE
+   istio-ingressgateway   LoadBalancer   10.23.247.74   35.203.155.229   80:32380/TCP,443:32390/TCP,32400:32400/TCP   2d
    ```
 
 1. To find the URL for your service, type:
