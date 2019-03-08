@@ -2,6 +2,10 @@
 
 Knative &amp; Istio Workshop on Google Cloud for Booster 2019.
 
+## Labs
+
+1. [Hello World](./labs/1-hello-world)
+
 ## Relevant Links
 
 * Knative @ Google: https://cloud.google.com/knative/
