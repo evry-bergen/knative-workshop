@@ -183,6 +183,8 @@ jobs:
       - run:
           name: install istio
           command: |
+            kubectl create ns --dry-run=${KUBECTL_DRYRUN} istio-system || true
+
             kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
             kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
             kubectl label --overwrite=true --dry-run=${KUBECTL_DRYRUN} namespace default istio-injection=enabled
@@ -190,6 +192,13 @@ jobs:
       - run:
           name: install knative
           command: |
+            kubectl create ns --dry-run=${KUBECTL_DRYRUN} \
+              knative-build \
+              knative-eventing \
+              knative-serving \
+              knative-sources \
+            || true
+
             kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait \
               --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
               --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
