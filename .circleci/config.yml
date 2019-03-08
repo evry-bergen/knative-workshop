@@ -31,7 +31,6 @@ save_repo: &save_repo
     key: *repo_cache_key
     paths:
       - *working_directory
-      - *bashrc_path
 
 set_terraform_environment: &set_terraform_environment
   run:
@@ -45,6 +44,9 @@ set_gcloud_environment: &set_gcloud_environment
     name: set gcloud environment
     command: |
       cd && touch $BASH_ENV
+
+      echo 'export ISTIO_GATEWAY_NAME=istio-gateway' >> $BASH_ENV
+      echo 'export GKE_CLUSTER_NAME=knative-workshop' >> $BASH_ENV
 
       if [ "${CIRCLE_BRANCH}" == "master" ]; then
         echo 'export KUBECTL_DRYRUN=false' >> $BASH_ENV
@@ -208,6 +210,20 @@ glcoud_job: &glcoud_job
             --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
             --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
             --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
+
+    - run:
+        name: patch istio gateway ip
+        command: |
+          export ISTIO_GATEWAY_IP=$(gcloud beta compute addresses list | grep ${ISTIO_GATEWAY_NAME} | awk '{ print $2 }')
+          export ISTIO_GATEWAY_IP=${ISTIO_GATEWAY_IP:-"1.2.3.4"}
+          echo "${ISTIO_GATEWAY_NAME} = ${ISTIO_GATEWAY_IP}"
+
+          kubectl patch svc istio-ingressgateway \
+            --namespace istio-system \
+            --dry-run=${KUBECTL_DRYRUN} \
+            --patch "{\"spec\": { \"loadBalancerIP\": \"${ISTIO_GATEWAY_IP}\" }}"
+
+          kubectl get svc --namespace istio-system
 
 jobs:
   lint:
