@@ -1,104 +1,70 @@
 # Knative & Istio Workshop
 
-Knative &amp; Istio Workshop on Google Cloud for Booster 2019.
+[Knative][knative] &amp; [Istio][istio] Workshop on Google Cloud for Booster
+2019 Conference.
+
+[knative]: https://www.knative.dev/
+[istio]: https://istio.io/
+
+## Knative
+
+Knative (pronounced kay-nay-tiv) extends Kubernetes to provide a set of
+middleware components that are essential to build modern, source-centric, and
+container-based applications that can run anywhere: on premises, in the cloud,
+or even in a third-party data center.
+
+Each of the components under the Knative project attempt to identify common
+patterns and codify the best practices that are shared by successful,
+real-world, Kubernetes-based frameworks and applications. Knative components
+focus on solving mundane but difficult tasks such as:
+
+* [Deploying a container][knative-deploy]
+* [Orchestrating source-to-URL workflows on Kubernetes][knative-workflows]
+* [Routing and managing traffic with blue/green deployment][knative-bluegreen]
+* [Scaling automatically and sizing workloads based on demand][knative-scaling]
+* [Binding running services to eventing ecosystems][knative-eventing]
+
+[knative-deploy]: https://www.knative.dev/docs/install/getting-started-knative-app
+[knative-workflows]: https://www.knative.dev/docs/serving/samples/source-to-url-go/
+[knative-bluegreen]: https://www.knative.dev/docs/serving/samples/blue-green-deployment
+[knative-scaling]: https://www.knative.dev/docs/serving/samples/autoscale-go/
+[knative-eventing]: https://www.knative.dev/docs/eventing/samples/kubernetes-event-source/
+
+Developers on Knative can use familiar idioms, languages, and frameworks to
+deploy functions, applications, or containers workloads.
+
+### Components
+
+The following Knative components are available:
+
+* [Build][knative-build] - Source-to-container build orchestration
+* [Eventing][knative-eventing] - Management and delivery of events
+* [Serving][knative-serving] - Request-driven compute that can scale to zero
+
+[knative-build]: https://www.knative.dev/docs/build/
+[knative-serving]: https://www.knative.dev/docs/serving/
+[knative-eventing]: https://www.knative.dev/docs/eventing/
+
+## Prerequisite
+
+* [Google Cloud Account (free trial)][gloud-free]
+* [Google Cloud CLI `gcloud` installed][gcloud-cli]
+* [Kubernetes CLI `kubectl` installed][kubectl-cli]
+
+[gloud-free]: https://cloud.google.com/free/
+[gloud-cli]: https://cloud.google.com/sdk/docs/#install_the_latest_cloud_tools_version_cloudsdk_current_version
+[kubectl-cli]: https://kubernetes.io/docs/tasks/tools/install-kubectl/
 
 ## Labs
 
+0. [Knative Setup](./labs/0-setup)
 1. [Hello World](./labs/1-hello-world)
 
-## Relevant Links
+---
 
-* Knative @ Google: https://cloud.google.com/knative/
-* GitHub: https://github.com/knative/
-* Docs: https://github.com/knative/docs
-* Install: https://github.com/knative/docs/tree/master/install
-  * Google Cloud: https://github.com/knative/docs/blob/master/install/Knative-with-GKE.md
-* Samples: https://github.com/knative/docs/tree/master/serving/samples
-* Build: https://github.com/knative/build
-* Build Templates: https://github.com/knative/build-templates
-* Eventing: https://github.com/knative/eventing
+Except as otherwise noted, the content of this page is licensed under the
+[Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
+under the [Apache 2.0 License][apache-2-0].
 
-## Setup
-
-1. Run `terraform apply`
-2. Get Kubernetes Credentials:
-
-```
-gcloud auth login
-gcloud config set project <project>
-gcloud container clusters get-credentials knative-workshop --zone europe-north1-a
-```
-
-3. Grant cluster-admin permissions to the current user:
-
-```
-kubectl create clusterrolebinding cluster-admin-binding \
---clusterrole=cluster-admin \
---user=$(gcloud config get-value core/account)
-```
-
-4. Delete the existing Istio authentication policy:
-
-```
-kubectl delete meshpolicies.authentication.istio.io default
-```
-
-4. Label the default namespace with `istio-injection=enabled`:
-
-```
-kubectl label namespace default istio-injection=enabled
-```
-
-5. Monitor the Istio components until all of the components show a `STATUS` of `Running` or `Completed`:
-
-```
-kubectl get pods --namespace istio-system -w
-```
-
-6. Run the `kubectl apply` command to install Knative and its dependencies:
-
-```
-kubectl apply --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
---filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
---filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
---filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
---filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
---filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
---filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
-```
-
-## Known Bugs
-
-**Pod Init:CrashLoopBackOff**
-
-```
-$ kubectl get pods -n knative-moitoring
-
-NAME                                  READY     STATUS                  RESTARTS   AGE       IP
-grafana-754bc795bb-jvtlk              0/2       Init:CrashLoopBackOff   6          11m       10.2.2.6
-kube-state-metrics-689bcd6589-wfsgd   0/5       Init:Error              7          11m       10.2.2.5
-```
-
-Due to limitations with istio-init and pod security policies not all pods will
-be able to start correctly when Istio is enabled. A common error from the
-`istio-init` contianer is the following:
-
-```
-$ kubectl get logs grafana-754bc795bb-jvtlk -n knative-monitoring -c istio-init -f
-
-iptables v1.6.0: can't initialize iptables table `nat': Permission denied (you must be root)
-```
-
-The solution is to patch the `grafana` (and other failing deployments),
-commenting out the security-context like this:
-
-```
-$ kubectl edit deploy kube-state-metrics -n knative-monitoring
-
-securityContext: {}
-```
-
-Source:
-* https://groups.google.com/forum/#!topic/istio-users/MPek-mO-JXM
-* https://github.com/istio/istio/issues/10358
-* https://github.com/istio/old_issues_repo/issues/172
+[cc-by]: https://creativecommons.org/licenses/by/4.0/
+[apache-2-0]: https://www.apache.org/licenses/LICENSE-2.0
