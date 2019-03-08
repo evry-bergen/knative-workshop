@@ -5,6 +5,9 @@ references:
 base_image: &base_image
   hashicorp/terraform:light
 
+bashrc_path: &bashrc_path
+  /root/.bashrc
+
 working_directory: &working_directory
   ~/project
 
@@ -13,7 +16,7 @@ default_config: &default_config
     - image: *base_image
   working_directory: *working_directory
   environment:
-    BASH_ENV: /root/.bashrc
+    BASH_ENV: *bashrc_path
 
 repo_cache_key: &repo_cache_key
   v1-repo-{{ .Branch }}-{{ .Revision }}
@@ -28,6 +31,7 @@ save_repo: &save_repo
     key: *repo_cache_key
     paths:
       - *working_directory
+      - *bashrc_path
 
 set_terraform_environment: &set_terraform_environment
   run:
