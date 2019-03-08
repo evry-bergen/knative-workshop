@@ -1,4 +1,4 @@
-# Lab 0: Knative Install
+# Lab 0: Knative Setup
 
 This guide walks you through the installation of the latest version of all
 Knative components using pre-built images.
@@ -198,7 +198,8 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
    --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
    --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
    --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
-   --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
+   --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
+   --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
    ```
 
 1. Monitor the Knative components until all of the components show a `STATUS` of
@@ -214,7 +215,7 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 
 ---
 
-<p align="right"><a href="../1-hello-world">Lab 1: Hello World➡️</a></p>
+<p align="right"><a href="../1-serve">Lab 1: Knative Serve →</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
 [Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
