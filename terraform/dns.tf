@@ -17,10 +17,10 @@ resource "google_dns_managed_zone" "knative_site" {
 }
 
 resource "google_dns_record_set" "knative_site_booster" {
-  name = "*.booster.${google_dns_managed_zone.knative_site.dns_name}"
+  name         = "*.booster.${google_dns_managed_zone.knative_site.dns_name}"
   managed_zone = "${google_dns_managed_zone.knative_site.name}"
-  type = "A"
-  ttl  = 60
+  type         = "A"
+  ttl          = 60
 
   rrdatas = ["${google_compute_address.istio_gateway.address}"]
 
@@ -44,10 +44,10 @@ output "knative_club_ns" {
 }
 
 resource "google_dns_record_set" "knative_club_booster" {
-  name = "*.booster.${google_dns_managed_zone.knative_club.dns_name}"
+  name         = "*.booster.${google_dns_managed_zone.knative_club.dns_name}"
   managed_zone = "${google_dns_managed_zone.knative_club.name}"
-  type = "A"
-  ttl  = 60
+  type         = "A"
+  ttl          = 60
 
   rrdatas = ["${google_compute_address.istio_gateway.address}"]
 
