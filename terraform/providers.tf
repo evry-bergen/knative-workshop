@@ -4,17 +4,16 @@ provider "google-beta" {
   zone    = "${var.google_zone}"
 }
 
-#provider "kubernetes" {
-#  host = "${module.gke.host}"
-#
-#  #username = "${var.cluster_username}"
-#  #password = "${var.cluster_password}"
-#
-#  client_certificate     = "${base64decode(module.gke.client_certificate)}"
-#  client_key             = "${base64decode(module.gke.client_key)}"
-#  cluster_ca_certificate = "${base64decode(module.gke.cluster_ca_certificate)}"
-#}
+provider "kubernetes" {
+  host = "${module.gke.host}"
 
+  #username = "${var.cluster_username}"
+  #password = "${var.cluster_password}"
+
+  client_certificate     = "${base64decode(module.gke.client_certificate)}"
+  client_key             = "${base64decode(module.gke.client_key)}"
+  cluster_ca_certificate = "${base64decode(module.gke.cluster_ca_certificate)}"
+}
 
 #provider "helm" {
 #  tiller_image = "gcr.io/kubernetes-helm/tiller:${var.helm_version}"
