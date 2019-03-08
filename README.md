@@ -59,6 +59,7 @@ The following Knative components are available:
 
 0. [Knative Setup](./labs/0-setup)
 1. [Hello World](./labs/1-hello-world)
+2. [Knative Build](./labs/2-build)
 
 ---
 
