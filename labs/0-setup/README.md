@@ -198,7 +198,8 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
    --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
    --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
    --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
-   --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml
+   --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
+   --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
    ```
 
 1. Monitor the Knative components until all of the components show a `STATUS` of
