@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  booster.knative.site: ""
+  booster.knative.club: ""
+kind: ConfigMap
+metadata:
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+    serving.knative.dev/release: devel
+  name: config-domain
+  namespace: knative-serving

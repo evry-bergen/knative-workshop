@@ -225,6 +225,12 @@ glcoud_job: &glcoud_job
 
           kubectl get svc --namespace istio-system
 
+    - run:
+        name: update knative domains
+        command: |
+          kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait \
+            --filename ./config/knative-domain.yaml
+
 jobs:
   lint:
     <<: *lint_job
