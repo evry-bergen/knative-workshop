@@ -166,6 +166,8 @@ kubectl delete --filename service.yaml
 
 ---
 
+<p align="left"><a href="../0-setup">⬅️ Lab 0: Knative Setup</a></p>
+
 Except as otherwise noted, the content of this page is licensed under the
 [Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
 under the [Apache 2.0 License][apache-2-0].
