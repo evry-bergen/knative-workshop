@@ -53,7 +53,7 @@ resource "google_dns_record_set" "knative_club_presentation" {
     "185.199.111.153",
     "185.199.108.153",
     "185.199.109.153",
-    "185.199.110.153"
+    "185.199.110.153",
   ]
 
   project = "${var.google_project}"
