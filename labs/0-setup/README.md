@@ -191,14 +191,19 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 1. Run the `kubectl apply` command to install Knative and its dependencies:
 
    ```bash
-   kubectl apply --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
-   --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
-   --filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
-   --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
-   --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
-   --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
-   --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
-   --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
+   kubectl apply --wait \
+     --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
+     --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring-metrics-prometheus.yaml \
+     --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
+     #--filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
+     --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
+     --filename https://github.com/knative/eventing/releases/download/v0.4.0/gcp-pubsub.yaml \
+     --filename https://github.com/knative/eventing/releases/download/v0.4.0/natss.yaml \
+     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/release.yaml \
+     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/gcppubsub.yaml \
+     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/message-dumper.yaml \
+     --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
+     --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
    ```
 
 1. Monitor the Knative components until all of the components show a `STATUS` of
