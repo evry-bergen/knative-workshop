@@ -250,16 +250,22 @@ jobs:
 
   destroy:
     <<: *default_config
+    docker:
+      - image: google/cloud-sdk
     steps:
       - *restore_repo
-      - *set_terraform_environment
-      - *terraform_init
+      - *set_gcloud_environment
       - run:
-          name: terraform destroy
+          name: gcloud init
           command: |
-            source $BASH_ENV
-            cd terraform
-            terraform destroy -auto-approve -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars
+            echo $GOOGLE_CREDENTIALS | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+
+      - run:
+          name: gcloud delete cluster
+          command: |
+            gcloud container clusters delete ${GKE_CLUSTER_NAME}
 
 workflows:
   version: 2
