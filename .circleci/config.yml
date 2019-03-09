@@ -186,8 +186,6 @@ glcoud_job: &glcoud_job
     - run:
         name: install istio
         command: |
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} istio-system || true
-
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
           kubectl label --overwrite=true --dry-run=${KUBECTL_DRYRUN} namespace default istio-injection=enabled
@@ -195,12 +193,6 @@ glcoud_job: &glcoud_job
     - run:
         name: install knative
         command: |
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-build      || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-eventing   || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-serving    || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-source     || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-monitoring || true
-
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait \
             --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
             --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring-metrics-prometheus.yaml \

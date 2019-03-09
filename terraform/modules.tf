@@ -12,3 +12,7 @@ module "gke" {
   min_node_count  = "${var.k8s_min_node_count}"
   max_node_count  = "${var.k8s_max_node_count}"
 }
+
+module "k8s" {
+  source = "./modules/k8s"
+}
