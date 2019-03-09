@@ -15,4 +15,9 @@ module "gke" {
 
 module "k8s" {
   source = "./modules/k8s"
+
+  // Google Cloud Platform config
+  project = "${var.google_project}"
+  region  = "${var.google_region}"
+  zone    = "${var.google_zone}"
 }
