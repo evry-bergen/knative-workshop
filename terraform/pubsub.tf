@@ -7,4 +7,3 @@ resource "google_pubsub_topic" "testing" {
     "used-by"      = "knative-lab-3"
   }
 }
-
