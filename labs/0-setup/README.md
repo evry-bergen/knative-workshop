@@ -196,7 +196,6 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
      --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
      --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring-metrics-prometheus.yaml \
      --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
-     #--filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
      --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
      --filename https://github.com/knative/eventing/releases/download/v0.4.0/gcp-pubsub.yaml \
      --filename https://github.com/knative/eventing/releases/download/v0.4.0/natss.yaml \
