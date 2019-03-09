@@ -248,6 +248,7 @@ kubectl delete --filename service.yaml
 ---
 
 <p align="left"><a href="../1-serve">← Lab 1: Knative Serve</a></p>
+<p align="right"><a href="../3-events">Lab 3: Knative Events →</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
 [Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed

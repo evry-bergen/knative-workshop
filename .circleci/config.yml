@@ -186,8 +186,6 @@ glcoud_job: &glcoud_job
     - run:
         name: install istio
         command: |
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} istio-system || true
-
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
           kubectl label --overwrite=true --dry-run=${KUBECTL_DRYRUN} namespace default istio-injection=enabled
@@ -195,19 +193,16 @@ glcoud_job: &glcoud_job
     - run:
         name: install knative
         command: |
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-build      || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-eventing   || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-serving    || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-source     || true
-          kubectl create ns --dry-run=${KUBECTL_DRYRUN} knative-monitoring || true
-
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait \
             --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
+            --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring-metrics-prometheus.yaml \
             --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
-            --filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
             --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
-            --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
-            --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
+            --filename https://github.com/knative/eventing/releases/download/v0.4.0/gcp-pubsub.yaml \
+            --filename https://github.com/knative/eventing/releases/download/v0.4.0/natss.yaml \
+            --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/release.yaml \
+            --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/gcppubsub.yaml \
+            --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/message-dumper.yaml \
             --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
             --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
 

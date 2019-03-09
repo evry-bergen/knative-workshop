@@ -96,7 +96,8 @@ Engine cluster.
    gcloud services enable \
      cloudapis.googleapis.com \
      container.googleapis.com \
-     containerregistry.googleapis.com
+     containerregistry.googleapis.com \
+     pubsub.googleapis.com
    ```
 
 ## Creating a Kubernetes cluster
@@ -106,7 +107,7 @@ components, the recommended configuration for a cluster is:
 
 - Kubernetes version 1.11 or later
 - 4 vCPU nodes (`n1-standard-4`)
-- Node autoscaling, up to 10 nodes
+- Node autoscaling, up to 4 nodes
 - API scopes for `cloud-platform`, `logging-write`, `monitoring-write`, and
   `pubsub` (if those features will be used)
 
@@ -117,7 +118,7 @@ components, the recommended configuration for a cluster is:
      --zone=$CLUSTER_ZONE \
      --cluster-version=latest \
      --machine-type=n1-standard-4 \
-     --enable-autoscaling --min-nodes=1 --max-nodes=10 \
+     --enable-autoscaling --min-nodes=1 --max-nodes=4 \
      --enable-autorepair \
      --scopes=service-control,service-management,compute-rw,storage-ro,cloud-platform,logging-write,monitoring-write,pubsub,datastore \
      --num-nodes=2
@@ -191,14 +192,18 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 1. Run the `kubectl apply` command to install Knative and its dependencies:
 
    ```bash
-   kubectl apply --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
-   --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
-   --filename https://github.com/knative/eventing/releases/download/v0.4.0/in-memory-channel.yaml \
-   --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
-   --filename https://github.com/knative/eventing-sources/releases/download/v0.4.0/release.yaml \
-   --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring.yaml \
-   --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
-   --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
+   kubectl apply --wait \
+     --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
+     --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring-metrics-prometheus.yaml \
+     --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
+     --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
+     --filename https://github.com/knative/eventing/releases/download/v0.4.0/gcp-pubsub.yaml \
+     --filename https://github.com/knative/eventing/releases/download/v0.4.0/natss.yaml \
+     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/release.yaml \
+     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/gcppubsub.yaml \
+     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/message-dumper.yaml \
+     --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
+     --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
    ```
 
 1. Monitor the Knative components until all of the components show a `STATUS` of

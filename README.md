@@ -60,6 +60,7 @@ The following Knative components are available:
 0. [Knative Setup](./labs/0-setup)
 1. [Knative Serve](./labs/1-serve)
 2. [Knative Build](./labs/2-build)
+3. [Knative Events](./labs/3-events)
 
 ---
 
