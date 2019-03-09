@@ -96,7 +96,8 @@ Engine cluster.
    gcloud services enable \
      cloudapis.googleapis.com \
      container.googleapis.com \
-     containerregistry.googleapis.com
+     containerregistry.googleapis.com \
+     pubsub.googleapis.com
    ```
 
 ## Creating a Kubernetes cluster
