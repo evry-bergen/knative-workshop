@@ -107,7 +107,7 @@ components, the recommended configuration for a cluster is:
 
 - Kubernetes version 1.11 or later
 - 4 vCPU nodes (`n1-standard-4`)
-- Node autoscaling, up to 10 nodes
+- Node autoscaling, up to 4 nodes
 - API scopes for `cloud-platform`, `logging-write`, `monitoring-write`, and
   `pubsub` (if those features will be used)
 
@@ -118,7 +118,7 @@ components, the recommended configuration for a cluster is:
      --zone=$CLUSTER_ZONE \
      --cluster-version=latest \
      --machine-type=n1-standard-4 \
-     --enable-autoscaling --min-nodes=1 --max-nodes=10 \
+     --enable-autoscaling --min-nodes=1 --max-nodes=4 \
      --enable-autorepair \
      --scopes=service-control,service-management,compute-rw,storage-ro,cloud-platform,logging-write,monitoring-write,pubsub,datastore \
      --num-nodes=2
