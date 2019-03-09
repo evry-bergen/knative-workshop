@@ -175,3 +175,14 @@ Results in: "Hello world"
 
 For more information about the format of the message, see the
 [PubsubMessage documentation](https://cloud.google.com/pubsub/docs/reference/rest/v1/PubsubMessage).
+
+---
+
+<p align="left"><a href="../2-build">← Lab 2: Knative Build</a></p>
+
+Except as otherwise noted, the content of this page is licensed under the
+[Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
+under the [Apache 2.0 License][apache-2-0].
+
+[cc-by]: https://creativecommons.org/licenses/by/4.0/
+[apache-2-0]: https://www.apache.org/licenses/LICENSE-2.0
