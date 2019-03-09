@@ -43,6 +43,22 @@ output "knative_club_ns" {
   value = "${google_dns_managed_zone.knative_club.name_servers}"
 }
 
+resource "google_dns_record_set" "knative_club_presentation" {
+  name         = "${google_dns_managed_zone.knative_club.dns_name}"
+  managed_zone = "${google_dns_managed_zone.knative_club.name}"
+  type         = "A"
+  ttl          = 300
+
+  rrdatas = [
+    "185.199.111.153",
+    "185.199.108.153",
+    "185.199.109.153",
+    "185.199.110.153"
+  ]
+
+  project = "${var.google_project}"
+}
+
 resource "google_dns_record_set" "knative_club_booster" {
   name         = "*.booster.${google_dns_managed_zone.knative_club.dns_name}"
   managed_zone = "${google_dns_managed_zone.knative_club.name}"
