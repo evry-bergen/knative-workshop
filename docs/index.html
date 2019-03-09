@@ -1,45 +1,302 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Title</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="keywords" content="kubernetes,serverless,istio,knative,workshop" />
+    <meta name="description" content="Serverless on Kubernetes with Istio and Knative." />
+    <title>Knative Workshop</title>
     <style>
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
-      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
       @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
-      body { font-family: 'Droid Serif'; }
+      body {
+        font-family: 'Droid Serif';
+      }
       h1, h2, h3 {
         font-family: 'Yanone Kaffeesatz';
-        font-weight: normal;
+        font-weight: 400;
+        margin-bottom: 0;
+      }
+      .remark-slide-content h1 { font-size: 3em; }
+      .remark-slide-content h2 { font-size: 2em; }
+      .remark-slide-content h3 { font-size: 1.6em; }
+      .footnote {
+        position: absolute;
+        bottom: 3em;
+      }
+      li p { line-height: 1.25em; }
+      .red { color: #fa0000; }
+      .large { font-size: 2em; }
+      a, a > code {
+        color: rgb(249, 38, 114);
+        text-decoration: none;
+      }
+      code {
+        background: #e7e8e2;
+        border-radius: 5px;
       }
       .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .remark-code-line-highlighted     { background-color: #373832; }
+      .pull-left {
+        float: left;
+        width: 47%;
+      }
+      .pull-right {
+        float: right;
+        width: 47%;
+      }
+      .pull-right ~ p {
+        clear: both;
+      }
+      #slideshow .slide .content code {
+        font-size: 0.8em;
+      }
+      #slideshow .slide .content pre code {
+        font-size: 0.9em;
+        padding: 15px;
+      }
+      .inverse {
+        background: #272822;
+        color: #777872;
+        text-shadow: 0 0 20px #333;
+      }
+      .inverse h1, .inverse h2 {
+        color: #f3f3f3;
+        line-height: 0.8em;
+      }
+
+      /* Slide-specific styling */
+      #slide-inverse .footnote {
+        bottom: 12px;
+        left: 20px;
+      }
+      #slide-how .slides {
+        font-size: 0.9em;
+        position: absolute;
+        top:  151px;
+        right: 140px;
+      }
+      #slide-how .slides h3 {
+        margin-top: 0.2em;
+      }
+      #slide-how .slides .first, #slide-how .slides .second {
+        padding: 1px 20px;
+        height: 90px;
+        width: 120px;
+        -moz-box-shadow: 0 0 10px #777;
+        -webkit-box-shadow: 0 0 10px #777;
+        box-shadow: 0 0 10px #777;
+      }
+      #slide-how .slides .first {
+        background: #fff;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        z-index: 1;
+      }
+      #slide-how .slides .second {
+        position: relative;
+        background: #fff;
+        z-index: 0;
+      }
+
+      /* Two-column layout */
+      .left-column {
+        color: #777;
+        width: 20%;
+        height: 92%;
+        float: left;
+      }
+        .left-column h2:last-of-type, .left-column h3:last-child {
+          color: #000;
+        }
+      .right-column {
+        width: 75%;
+        float: right;
+        padding-top: 1em;
+      }
     </style>
   </head>
   <body>
     <textarea id="source">
-
-class: center, middle
-
-# Title
-
+name: inverse
+layout: true
+class: center, middle, inverse
 ---
-
-# Agenda
-
-1. Introduction
-2. Deep-dive
-3. ...
-
+# Serverless on Kubernetes
+Istio, Knative, &amp; Knaiko
+.footnote[Go directly to [workshop](https://github.com/evry-bergen/knative-workshop)]
 ---
+layout: false
+.left-column[
+  ## Kubernetes
+]
+.right-column[
+  Kubernetes is a portable, extensible open-source platform for managing
+  containerized workloads and services, that facilitates both declarative
+  configuration and automation. It has a large, rapidly growing ecosystem.
+  Kubernetes services, support, and tools are widely available.
 
-# Introduction
+  Kubernetes has a number of features. It can be thought of as:
 
+- a container platform
+
+- a microservices platform
+
+- a portable cloud platform and a lot more.
+]
+???
+https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/
+---
+.left-column[
+  ## Kubernetes
+  ## Istio
+]
+.right-column[
+  Istio makes it easy to create a network of deployed services with load
+  balancing, service-to-service authentication, monitoring, and more, without
+  any changes in service code.
+
+- Automatic load balancing for HTTP, gRPC, WebSocket, and TCP traffic.
+
+- Fine-grained control of traffic behavior with rich routing rules, retries,
+  failovers, and fault injection.
+
+- A pluggable policy layer and configuration API supporting access controls,
+  rate limits and quotas.
+
+- Automatic metrics, logs, and traces for all traffic within a cluster,
+  including cluster ingress and egress.
+
+- Secure service-to-service communication in a cluster with strong
+  identity-based authentication and authorization.
+]
+???
+https://istio.io/docs/concepts/what-is-istio/
+---
+.left-column[
+  ## Kubernetes
+  ## Istio
+  ## Knative
+]
+.right-column[
+  Knative (pronounced kay-nay-tiv) extends Kubernetes to provide a set of
+  middleware components that are essential to build modern, source-centric, and
+  container-based applications that can run anywhere: on premises, in the cloud,
+  or even in a third-party data center.
+
+  Knative focus on solving mundane but difficult tasks such as:
+
+- deploying a container
+
+- orchestrating source-to-URL workflows on Kubernetes
+
+- routing and managing traffic with blue/green deployment
+
+- scaling automatically and sizing workloads based on demand
+
+- binding running services to eventing ecosystems
+]
+???
+https://www.knative.dev/docs/
+---
+template: inverse
+
+## How does it work, then?
+---
+name: how
+
+.left-column[
+  ## How does it work?
+### - Build
+]
+.right-column[
+  ## Knative Build
+  Converting source packages into runnable containers.
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Build
+  ### - Serving
+]
+.right-column[
+  ## Knative Serving
+  Allow our compute utilization to be driven by request load (think: autoscaler)
+  and scale to zero when there are no requests.
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Build
+  ### - Serving
+  ### - Pipeline
+]
+.right-column[
+  ## Knative Pipeline
+  Leverage Knative Build and Knative Events to abstract away CI/CD
+  implemenetations on top of Kubernete.
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Build
+  ### - Serving
+  ### - Pipeline
+  ### - Eventing
+]
+.right-column[
+  ## Knative Eventing
+  Composing services and compute resources via events to build staged event
+  driven architectures.
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Build
+  ### - Serving
+  ### - Pipeline
+  ### - Eventing
+  ### - Caching
+]
+.right-column[
+  ## Knative Caching
+  Simple API for providing caching to Knative componets.
+]
+---
+template: inverse
+
+## It's time to get started!
+---
+.left-column[
+  ## Getting started
+]
+.right-column[
+Getting up and running is done in only a few steps:
+
+1. Go to **github.com/evry-bergen/knative-workshop**
+
+2. Clone the repository locally
+
+3. Open the `./labs/0-setup` directory
+]
+---
+name: last-page
+template: inverse
+
+## That's all folks (for now)!
     </textarea>
     <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    <script>
+      var hljs = remark.highlighter.engine;
     </script>
     <script>
-      var slideshow = remark.create();
+      var slideshow = remark.create({
+          highlightStyle: 'monokai',
+          highlightLanguage: 'remark',
+          highlightLines: true
+        }) ;
     </script>
   </body>
 </html>
