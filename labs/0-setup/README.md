@@ -181,12 +181,11 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 1. Create the required namespaces for Knative and its dependencies:
 
    ```bash
-   kubectl create namesapce \
-     knative-serving \
-     knative-build \
-     knative-eventing \
-     knative-sources \
-     knative-monitoring
+   kubectl create namespace knative-serving
+   kubectl create namespace knative-build
+   kubectl create namespace knative-eventing
+   kubectl create namespace knative-sources
+   kubectl create namespace knative-monitoring
    ```
 
 1. Run the `kubectl apply` command to install Knative and its dependencies:
