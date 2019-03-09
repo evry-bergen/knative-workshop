@@ -5,7 +5,7 @@ resource "google_service_account" "pubsub_sa" {
 }
 
 resource "google_project_iam_member" "pubsub_sa" {
-  role    = "roles/editor"
+  role    = "roles/pubsub.editor"
   member  = "serviceAccount:${google_service_account.pubsub_sa.account_id}@${var.project}.iam.gserviceaccount.com"
   project = "${var.project}"
 }
