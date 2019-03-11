@@ -54,7 +54,7 @@ GCP][gce-zones]. These variables are used later to create a Kubernetes cluster.
 
 ```bash
 export CLUSTER_NAME=knative-workshop
-export CLUSTER_ZONE=eu-north1-a
+export CLUSTER_ZONE=europe-north1-a
 ```
 
 ### Setting up a Google Cloud Platform project
