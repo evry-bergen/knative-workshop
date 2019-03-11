@@ -35,9 +35,9 @@ resource "kubernetes_namespace" "knative-serving" {
   }
 }
 
-resource "kubernetes_namespace" "knative-source" {
+resource "kubernetes_namespace" "knative-sources" {
   metadata {
-    name = "knative-source"
+    name = "knative-sources"
   }
 }
 
