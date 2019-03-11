@@ -5,10 +5,12 @@
     <meta name="keywords" content="kubernetes,serverless,istio,knative,workshop" />
     <meta name="description" content="Serverless on Kubernetes with Istio and Knative." />
     <title>Knative Workshop</title>
+		<link rel="stylesheet" href="./css/simple-grid.css">
     <style>
       @import url(https://fonts.googleapis.com/css?family=Droid+Serif);
       @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
       @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+      @import url(https://simplegrid.io/grid/simple-grid.css)
 
       body {
         font-family: 'Droid Serif';
@@ -71,6 +73,9 @@
         bottom: 12px;
         left: 20px;
       }
+      #slide-evolution img {
+        max-height:100px;
+      }
       #slide-how .slides {
         font-size: 0.9em;
         position: absolute;
@@ -120,6 +125,10 @@
   </head>
   <body>
     <textarea id="source">
+name: container
+layout: true
+class: center, middle, container
+---
 name: inverse
 layout: true
 class: center, middle, inverse
@@ -127,6 +136,28 @@ class: center, middle, inverse
 # Serverless on Kubernetes
 Istio, Knative, &amp; Knaiko
 .footnote[Go directly to [workshop](https://github.com/evry-bergen/knative-workshop)]
+---
+template: container
+name: evolution
+
+.row[
+  .col-3[
+  ![Physical Server](./assets/server-physical.png)
+  ### Physical Server
+  ]
+  .col-3[
+  ![Virtual Server](./assets/server-virtual.png)
+  ### Virtual Server
+  ]
+  .col-3[
+  ![Container](./assets/container.png)
+  ### Container
+  ]
+  .col-3[
+  ![Function](./assets/function.png)
+  ### Function
+  ]
+]
 ---
 layout: false
 .left-column[
@@ -184,10 +215,8 @@ https://istio.io/docs/concepts/what-is-istio/
   ## Knative
 ]
 .right-column[
-  Knative (pronounced kay-nay-tiv) extends Kubernetes to provide a set of
-  middleware components that are essential to build modern, source-centric, and
-  container-based applications that can run anywhere: on premises, in the cloud,
-  or even in a third-party data center.
+  Knative extends Kubernetes to provide platform to build, deploy, and manage
+  modern serverless workloads.
 
   Knative focus on solving mundane but difficult tasks such as:
 
@@ -204,6 +233,18 @@ https://istio.io/docs/concepts/what-is-istio/
 ???
 https://www.knative.dev/docs/
 ---
+.left-column[
+  ## Kubernetes
+  ## Istio
+  ## Knative
+]
+.right-column[
+  Knative is designed for different personas:
+  ![Knative Architecture Overview](https://www.knative.dev/docs/images/knative-audience.svg)
+]
+???
+https://www.knative.dev/docs/
+---
 template: inverse
 
 ## How does it work, then?
@@ -212,7 +253,30 @@ name: how
 
 .left-column[
   ## How does it work?
-### - Build
+  ### - Serving
+]
+.right-column[
+
+  Knative Serving supports deploying and serving of serverless applications and
+  functions to enable:
+
+- running containers
+
+- automatic scaling
+
+- http routing
+
+- point-in-time snapshot
+
+  ![Knative Serving Overview](https://raw.githubusercontent.com/knative/serving/master/docs/spec/images/object_model.png)
+]
+???
+https://www.knative.dev/docs/serving/
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+  ### - Build
 ]
 .right-column[
   ## Knative Build
@@ -221,19 +285,8 @@ name: how
 ---
 .left-column[
   ## How does it work?
-  ### - Build
   ### - Serving
-]
-.right-column[
-  ## Knative Serving
-  Allow our compute utilization to be driven by request load (think: autoscaler)
-  and scale to zero when there are no requests.
-]
----
-.left-column[
-  ## How does it work?
   ### - Build
-  ### - Serving
   ### - Pipeline
 ]
 .right-column[
@@ -244,8 +297,8 @@ name: how
 ---
 .left-column[
   ## How does it work?
-  ### - Build
   ### - Serving
+  ### - Build
   ### - Pipeline
   ### - Eventing
 ]
@@ -257,8 +310,8 @@ name: how
 ---
 .left-column[
   ## How does it work?
-  ### - Build
   ### - Serving
+  ### - Build
   ### - Pipeline
   ### - Eventing
   ### - Caching
