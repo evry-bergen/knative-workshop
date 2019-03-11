@@ -261,6 +261,25 @@ jobs:
           command: |
             gcloud container clusters delete ${GKE_CLUSTER_NAME}
 
+  scale:
+    <<: *default_config
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - *restore_repo
+      - *set_gcloud_environment
+      - run:
+          name: gcloud init
+          command: |
+            echo $GOOGLE_CREDENTIALS | gcloud auth activate-service-account --key-file=-
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+
+      - run:
+          name: gcloud scale cluster
+          command: |
+            gcloud container clusters resize ${GKE_CLUSTER_NAME} --size 1
+
 workflows:
   version: 2
   lint_plan_apply:
@@ -292,4 +311,4 @@ workflows:
             branches:
               only: [master]
     jobs:
-      - destroy
+      - scale
