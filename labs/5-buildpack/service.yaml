@@ -1,0 +1,30 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: nodejs-runtime-hello
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      build:
+        apiVersion: build.knative.dev/v1alpha1
+        kind: Build
+        spec:
+          serviceAccountName: build-bot
+          source:
+            git:
+              url: https://github.com/triggermesh/nodejs-runtime/
+              revision: master
+          template:
+            name: nodejs-runtime
+            arguments:
+            - name: IMAGE
+              value: eu.gcr.io/knative-workshop-2019/lab-4-nodejs
+            - name: DIRECTORY
+              value: ./hello-world
+            - name: FUNCTION_NAME
+              value: hello.js
+      revisionTemplate:
+        spec:
+          container:
+            image: eu.gcr.io/knative-workshop-2019/lab-4-nodejs:latest
