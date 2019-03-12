@@ -51,3 +51,6 @@ spec:
     - --context=/workspace/${DIRECTORY}
     - --dockerfile=/workspace/${DIRECTORY}/Dockerfile
     - --destination=${IMAGE}:${TAG}
+    env:
+    - name: DOCKER_CONFIG
+      value: /builder/home/.docker
