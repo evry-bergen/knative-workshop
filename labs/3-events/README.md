@@ -33,8 +33,8 @@ Storage][gcp-storage], [IoT Core][gcp-iot] and [Cloud Scheduler][gcp-scheduler].
    1. Give that Service Account the `Pub/Sub Editor` role on your GCP project:
 
       ```shell
-      gcloud projects add-iam-policy-binding $PROJECT_ID \
-        --member=serviceAccount:knative-pubsub@$PROJECT_ID.iam.gserviceaccount.com \
+      gcloud projects add-iam-policy-binding $PROJECT \
+        --member=serviceAccount:knative-event@$PROJECT.iam.gserviceaccount.com \
         --role roles/pubsub.editor
       ```
 
@@ -43,7 +43,7 @@ Storage][gcp-storage], [IoT Core][gcp-iot] and [Cloud Scheduler][gcp-scheduler].
 
       ```shell
       gcloud iam service-accounts keys create knative-pubsub.json \
-        --iam-account=knative-pubsub@$PROJECT_ID.iam.gserviceaccount.com
+        --iam-account=knative-event@$PROJECT.iam.gserviceaccount.com
       ```
 
    1. Create two secrets on the kubernetes cluster with the downloaded key:
