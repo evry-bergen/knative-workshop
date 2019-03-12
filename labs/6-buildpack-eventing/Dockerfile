@@ -8,5 +8,10 @@ RUN apk --no-cache add curl \
     && chmod +x aws-custom-runtime \
     && curl -sL https://github.com/triggermesh/knative-lambda-runtime/archive/${RUNTIME_VERSION}.tar.gz | tar -xz knative-lambda-runtime-${RUNTIME_VERSION}/node-10.x \
     && mv knative-lambda-runtime-${RUNTIME_VERSION}/node-10.x/* .
+RUN apk --no-cache add imagemagick file     
+
+ENV SRCBUCKET "knative-upload"
+ENV DSTBUCKET "knative-gallery"
+ENV PROJECT = "knative-workshop-2019"
 
 ENV LAMBDA_TASK_ROOT "/opt"
