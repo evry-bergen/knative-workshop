@@ -9,8 +9,8 @@ const srcBucket = gcs.bucket(process.env.SRCBUCKET);
 const dstBucket = gcs.bucket(process.env.DSTBUCKET);
 
 
-var exports = module.exports = function(event, callback) {
-//exports.thumbnailCreator = (event, callback) => {
+
+module.exports.thumbnailCreator = (event, callback) => {
 console.log('Events',event);
   const pubsubMessage = event.data;
   const message = JSON.parse(Buffer.from(pubsubMessage.data, 'base64').toString());
