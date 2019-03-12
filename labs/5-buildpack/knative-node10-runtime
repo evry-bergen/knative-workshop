@@ -15,9 +15,7 @@
 apiVersion: build.knative.dev/v1alpha1
 kind: BuildTemplate
 metadata:
-  name: nodejs-runtime
-  annotations:
-    origin: github.com/triggermesh/nodejs-runtime
+  name: knative-node10-runtime
 spec:
   parameters:
   - name: IMAGE
@@ -27,43 +25,32 @@ spec:
     default: latest
   - name: DIRECTORY
     description: The subdirectory of the workspace/repo
-    default: .
-  - name: FUNCTION_NAME
-    description: The name of the exported function to put in the runtime (empty to use package.json)
     default: ""
+  - name: HANDLER
+    default: "function.handler"
   steps:
   - name: dockerfile
-    image: gcr.io/kaniko-project/executor:debug@sha256:5a8d578dc7ff0114daadb20902bf8529f9a2257440d68ac9c6c4b7da98665ca1
+    image: gcr.io/kaniko-project/executor@sha256:30ba460a034a8051b3222a32e20cb6049741e58384e3adf8c8987c004e2f2ab9
     command:
     - /busybox/sh
     args:
     - -c
     - |
       cd /workspace/${DIRECTORY}
-      echo "FROM projectriff/node-function-invoker@sha256:ae7f87c524bb46dbfd7acc986b827f74d93d1301ea137f52734c7607295a919c" > Dockerfile
-      if [ -z "${FUNCTION_NAME}" ]; then
-      cat <<EOF >> Dockerfile
-      ENV FUNCTION_URI=/functions/
-      COPY package-lock.json \${FUNCTION_URI}package-lock.json
-      COPY package.json \${FUNCTION_URI}package.json
-      RUN (cd \${FUNCTION_URI} && npm ci)
-      COPY . \${FUNCTION_URI}
+      cat <<EOF > Dockerfile
+        FROM gcr.io/triggermesh/knative-lambda-node10
+        ENV _HANDLER "${HANDLER}"
+
+        COPY . .
+        RUN npm install
+        ENTRYPOINT ["/opt/aws-custom-runtime"]
       EOF
-      else
-      cat <<EOF >> Dockerfile
-      ENV FUNCTION_URI=/functions/${FUNCTION_NAME}
-      COPY ${FUNCTION_NAME} \${FUNCTION_URI}
-      EOF
-      fi
-      pwd
-      ls -l
-      cat Dockerfile
   - name: export
-    image: gcr.io/kaniko-project/executor@sha256:413fe14232a5f37f02a57758fe891993df3d58114ed948b00c9b044ed2f05f45
+    image: gcr.io/kaniko-project/executor@sha256:30ba460a034a8051b3222a32e20cb6049741e58384e3adf8c8987c004e2f2ab9
     args:
     - --context=/workspace/${DIRECTORY}
     - --dockerfile=/workspace/${DIRECTORY}/Dockerfile
     - --destination=${IMAGE}:${TAG}
     env:
-    - name: DOCKER_CONFIG
-      value: /builder/home/.docker
+      - name: DOCKER_CONFIG
+        value: /builder/home/.docker

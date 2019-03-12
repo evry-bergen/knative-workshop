@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: nodejs-runtime-hello
+  name: lab-5-nodejs
   namespace: default
 spec:
   runLatest:
@@ -13,18 +13,18 @@ spec:
           serviceAccountName: build-bot
           source:
             git:
-              url: https://github.com/triggermesh/nodejs-runtime/
-              revision: master
+              url: https://github.com/evry-bergen/knative-workshop/
+              revision: lab-5
           template:
-            name: nodejs-runtime
+            name: knative-node10-runtime
             arguments:
             - name: IMAGE
-              value: eu.gcr.io/knative-workshop-2019/lab-4-nodejs
+              value: eu.gcr.io/knative-workshop-2019/lab-5-nodejs
             - name: DIRECTORY
-              value: ./hello-world
-            - name: FUNCTION_NAME
-              value: hello.js
+              value: ./labs/5-buildpack/
+            - name: HANDLER
+              value: handler.sayHelloAsync
       revisionTemplate:
         spec:
           container:
-            image: eu.gcr.io/knative-workshop-2019/lab-4-nodejs:latest
+            image: eu.gcr.io/knative-workshop-2019/lab-5-nodejs:latest
