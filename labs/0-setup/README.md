@@ -211,6 +211,8 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
      --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
      --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
    ```
+   
+   Sometimes you get an error message here if so run it again.
 
 1. Monitor the Knative components until all of the components show a `STATUS` of
    `Running`:
