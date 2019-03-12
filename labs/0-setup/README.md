@@ -31,9 +31,9 @@ commands will need to be adjusted for use in a Windows environment.
    ```
    gcloud components install kubectl
    ```
-   
+
    if you are running an old version of `kubectl`:
-   
+
    ```
    gcloud components update
    ```
@@ -122,7 +122,7 @@ components, the recommended configuration for a cluster is:
    ```bash
    gcloud container clusters create $CLUSTER_NAME \
      --zone=$CLUSTER_ZONE \
-     --cluster-version=latest \
+     --cluster-version=1.11.7-gke.12 \
      --machine-type=n1-standard-4 \
      --enable-autoscaling --min-nodes=1 --max-nodes=4 \
      --enable-autorepair \
@@ -210,7 +210,7 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
      --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
      --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
    ```
-   
+
    Sometimes you get an error message here if so run it again.
 
 1. Monitor the Knative components until all of the components show a `STATUS` of
