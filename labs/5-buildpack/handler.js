@@ -5,6 +5,8 @@ async function justWait() {
 module.exports.sayHelloAsync = async (event) => {
   console.log(event);
 
+  event = event || {};
+
   await justWait();
-  return {hello: event.name};
+  return {hello: event.name || 'Uknown'};
 };
