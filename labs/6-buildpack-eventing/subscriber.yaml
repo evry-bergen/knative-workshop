@@ -23,7 +23,7 @@ spec:
             - name: IMAGE
               value: eu.gcr.io/knative-workshop-2019/lab-6-nodejs
             - name: DIRECTORY
-              value: .
+              value: ./labs/6-buildpack-eventing/
             - name: HANDLER
               value: thumbnailCreator.thumbnailCreator
       revisionTemplate:
