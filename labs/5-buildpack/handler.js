@@ -3,6 +3,8 @@ async function justWait() {
 }
 
 module.exports.sayHelloAsync = async (event) => {
+  console.log(event);
+
   await justWait();
   return {hello: event.name};
 };

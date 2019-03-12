@@ -1,10 +1,11 @@
 # Lab 5: Knative AWS Buildpack
 
-The point with FaaS is to focus on what your code is supposed to do, not how it is executed.
-Source-to-URL can be seen as a different definition of the same thing.
+The point with FaaS is to focus on what your code is supposed to do, not how it
+is executed. Source-to-URL can be seen as a different definition of the same
+thing.
 
-There are many such platforms, but Knative is designed as a standard that platforms can implement.
-The promise is that your logic can be vendor neutral.
+There are many such platforms, but Knative is designed as a standard that
+platforms can implement. The promise is that your logic can be vendor neutral.
 
 A prospective end user would use Knative through a frontend or CLI.
 The `kubectl` commands in the example below would be hidden to the end user.
@@ -16,82 +17,93 @@ Source-to-URL means the end user need only to know how to:
 
 ## Chosing a runtime
 
-Given that your function is a piece of code, possibly importing other pieces and libraries,
-you need to select a _runtime_.
-Your organization will likely want to standarize on a couple of runtimes,
-matched with coding conventions.
+Given that your function is a piece of code, possibly importing other pieces and
+libraries, you need to select a _runtime_. Your organization will likely want to
+standarize on a couple of runtimes, or [buildpacks][buildpacks], matched with
+established code conventions.
 
-With Knative your code will run as an HTTP/gRPC server.
-Your function is a handler for incoming requests or events,
-and the wrapping of that handler can be seen as boilerplate.
-Ultimately, in year 2018, that wrapping is a container image.
+[buildpacks]: https://buildpacks.io/
+
+With Knative your code will run as an HTTP/gRPC server. Your function is a
+handler for incoming requests or events, and the wrapping of that handler can be
+seen as boilerplate. Ultimately, in year 2019, that wrapping is a container
+image.
+
+## The Knative Lambda Runtime
+
+For this lab assignment we have chosen to use the
+[Knative Lambda Runtime][knative-labda-runtime] by [Triggermesh][triggermesh]
+a comercial Serverless offering build on top of Knative.
+
+[knative-labda-runtime]: https://github.com/triggermesh/knative-lambda-runtime
+[triggermesh]: https://triggermesh.com/
+
+The Knative Lambda Runtimes (e.g KLR, pronounced clear) are Knative [build
+templates][knative-build-templates] that can be used to run an AWS Lambda
+function in a Kubernetes cluster installed with Knative.
+
+[knative-build-templates]: https://github.com/knative/build-templates
+
+The execution environment where the AWS Lambda function runs is a clone of the
+AWS Lambda cloud environment thanks to a custom [AWS runtime
+interface][aws-custom-runtime] and some inspiration from the [LambCI][labdci]
+project.
+
+[aws-custom-runtime]: https://github.com/triggermesh/aws-custom-runtime
+[labdci]: https://github.com/lambci/docker-lambda
+
+With these templates, you can run your AWS Lambda functions as is in a Knative
+powered Kubernetes cluster.
+
+## The `knative-build` service account
+
+This lab uses the `knative-build` service account from Lab 2 in order to push
+animage to the Docker Registry.
 
 ## Push source to a repo
 
-Our repository contains one or more "example-" folders with source that should be supported.
-That's how we scope and test the build template.
+Keep in mind that even though the code may be locally on your machine,
+Knative needs to somewhere to access it from. During this workshop it will fetch
+the code from the workshop's [public GitHub repository][workshop-git].
 
-First, clone or fork this repository.
-Being vendor neutral as promised, to `kubectl apply` the example you need a [Knative cluster](https://github.com/knative/docs/blob/master/install/README.md).
-
-However, two aspects are not vendor neutral:
-
- * The domain of the URLs that point to your cluster.
-   - The example value is _`example.com`_.
- * The image URLs, your registry for runtime container images.
-   - The example value is _`knative-local-registry:5000`_.
-
-Treat these example values as placeholders and replace them with the values from your cluster.
-
-### The `knative-build` service account
-
-As authenticated container registries is the norm,
-the build manifests here include `serviceAccountName: knative-build` in order to support authentication.
-Use a [stub](https://github.com/triggermesh/knative-local-registry#use-a-service-account-for-build) if you don't need authentication,
-or simply remove the property.
-
-## Using Riff's invoker as Node.js runtime
-
-We evaluated [Kubeless](https://kubeless.io/),
-[Buildpack](https://docs.cloudfoundry.org/buildpacks/),
-and [Riff](https://projectriff.io/invokers/) for this example.
-Our conclusions in essence:
-
- * Kubeless has quite a bit of legacy.
- * While supporting multiple languages, Buildpack does the build but doesn't actually provide an invoker for your function.
- * Riff's nodejs invoker supports both standalone functions and full Node.js modules.
-
-Hence we settled for riff now, but the lock-in is minimal.
-Riff's function model is simple, as in this square example:
-
-```nodejs
-module.exports = x => x * x;
-```
-
-Our example function will depend on an additional source file and a 3rd party library.
-For production builds we adhere to new-ish [npm](https://blog.npmjs.org/post/171556855892/introducing-npm-ci-for-faster-more-reliable) conventions,
-using `package-lock.json` with [npm ci](https://docs.npmjs.com/cli/ci).
+[workshop-git]: https://github.com/evry-bergen/knative-workshop
 
 ## Source-to-URL workflow using kubectl
 
-The [hello-world](./hello-world/) folder contains a basic handler,
-with some understanding of how the runtime handles argument types.
+This lab assignment contains a basic handler [`handler.js`](./handler.js) that
+contians a basic handler function written in Node.JS:
 
-First create the build template:
+```js
+async function justWait() {
+  return new Promise((resolve, reject) => setTimeout(resolve, 100));
+}
 
-```bash
-kubectl apply -f knative-build-template.yaml
+module.exports.sayHelloAsync = async (event) => {
+  console.log(event);
+
+  await justWait();
+  return {hello: event.name};
+};
 ```
 
-The start the service which builds itself:
+First apply the Knative Lambda Runtimes for Node.JS:
 
 ```bash
-kubectl apply -f ./hello-world/
+kubectl apply -f knative-node10-runtime.yaml
 ```
 
-You can now wait for the build and the subsequent deployment using `kubectl get pods -w`.
+Then start the service which builds itself:
 
-When the deployment is 3/3 ready, use the DOMAIN shown by `kubectl get ksvc nodejs-runtime-hello` to access the service. This runtime requires POST, for example `curl -d 'Knative' nodejs-runtime-hello.default.example.com`.
+```bash
+kubectl apply -f service.yaml
+```
+
+You can now wait for the build and the subsequent deployment using `kubectl get
+pods -w`.
+
+When the deployment is 3/3 ready, use the DOMAIN shown by `kubectl get ksvc
+nodejs-runtime-hello` to access the service. This runtime requires POST, for
+example `curl -d 'Knative' nodejs-runtime-hello.default.example.com`.
 
 If your cluster lacks an external domain see next example for how to curl from inside the cluster.
 
