@@ -216,6 +216,9 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 1. Monitor the Knative components until all of the components show a `STATUS` of
    `Running`:
 
+   > Note: the pod `gcppubsub-controller-manager-0` depends on a secret that we will create in a
+   > later lab, until then it the pod status will be `ContainerCreating`
+
    ```bash
    kubectl get pods --namespace knative-serving
    kubectl get pods --namespace knative-build
