@@ -3,7 +3,7 @@
 apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: nodejs-runtime-hello
+  name: nodejs-thumbnailer
   namespace: default
 spec:
   runLatest:
@@ -15,17 +15,17 @@ spec:
           serviceAccountName: build-bot
           source:
             git:
-              url: https://github.com/triggermesh/nodejs-runtime/
-              revision: master
+              url: https://github.com/evry-bergen/knative-workshop/
+              revision: 6-buildpack-eventing
           template:
-            name: nodejs-runtime
+            name: knative-node10-runtime
             arguments:
             - name: IMAGE
               value: eu.gcr.io/knative-workshop-2019/lab-6-nodejs
             - name: DIRECTORY
-              value: ./thumbnailCreator
-            - name: FUNCTION_NAME
-              value: thumbnailCreator.js
+              value: .
+            - name: HANDLER
+              value: thumbnailCreator.thumbnailCreator
       revisionTemplate:
         spec:
           container:
