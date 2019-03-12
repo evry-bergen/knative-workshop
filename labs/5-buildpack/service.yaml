@@ -1,0 +1,30 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: lab-5-nodejs
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      build:
+        apiVersion: build.knative.dev/v1alpha1
+        kind: Build
+        spec:
+          serviceAccountName: build-bot
+          source:
+            git:
+              url: https://github.com/evry-bergen/knative-workshop/
+              revision: lab-5
+          template:
+            name: knative-node10-runtime
+            arguments:
+            - name: IMAGE
+              value: eu.gcr.io/knative-workshop-2019/lab-5-nodejs
+            - name: DIRECTORY
+              value: ./labs/5-buildpack/
+            - name: HANDLER
+              value: handler.sayHelloAsync
+      revisionTemplate:
+        spec:
+          container:
+            image: eu.gcr.io/knative-workshop-2019/lab-5-nodejs:latest
