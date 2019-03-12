@@ -23,9 +23,9 @@ spec:
             - name: IMAGE
               value: eu.gcr.io/knative-workshop-2019/lab-6-nodejs
             - name: DIRECTORY
-              value: ./hello-world
+              value: ./thumbnailCreator
             - name: FUNCTION_NAME
-              value: hello.js
+              value: thumbnailCreator.js
       revisionTemplate:
         spec:
           container:
