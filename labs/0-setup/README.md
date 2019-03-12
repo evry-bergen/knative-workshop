@@ -31,6 +31,12 @@ commands will need to be adjusted for use in a Windows environment.
    ```
    gcloud components install kubectl
    ```
+   
+   if you are running an old version of `kubectl`:
+   
+   ```
+   gcloud components update
+   ```
 
 1. Authorize `gcloud`:
 
