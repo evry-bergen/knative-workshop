@@ -113,7 +113,7 @@ container for the application.
    apiVersion: serving.knative.dev/v1alpha1
    kind: Service
    metadata:
-     name: lab-2-build
+     name: app-from-source
      namespace: default
    spec:
      runLatest:
