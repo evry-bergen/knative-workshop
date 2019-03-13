@@ -96,18 +96,18 @@ Storage][gcp-storage], [IoT Core][gcp-iot] and [Cloud Scheduler][gcp-scheduler].
    ```
 
 1. Replace the
-   [`MY_GCP_PROJECT` placeholder](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
+   [`PROJECT` placeholder](https://cloud.google.com/resource-manager/docs/creating-managing-projects)
    in [`gcp-pubsub-source.yaml`](./gcp-pubsub-source.yaml) and apply it.
 
-   If you're in the samples directory, you can replace `MY_GCP_PROJECT` and
+   If you're in the samples directory, you can replace `PROJECT` and
    apply in one command:
 
    ```shell
-    sed "s/MY_GCP_PROJECT/$(gcloud config get-value project)/g" gcp-pubsub-source.yaml | \
+    sed "s/PROJECT/$(gcloud config get-value project)/g" gcp-pubsub-source.yaml | \
         kubectl apply --filename -
    ```
 
-   If you are replacing `MY_GCP_PROJECT` manually, then make sure you apply the
+   If you are replacing `PROJECT` manually, then make sure you apply the
    resulting YAML:
 
    ```shell

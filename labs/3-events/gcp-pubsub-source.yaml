@@ -1,5 +1,5 @@
 # Replace the following before applying this file:
-#   MY_GCP_PROJECT: Replace with the GCP Project's ID.
+#   PROJECT: Replace with the GCP Project's ID.
 
 apiVersion: sources.eventing.knative.dev/v1alpha1
 kind: GcpPubSubSource
@@ -9,7 +9,7 @@ spec:
   gcpCredsSecret:  # A secret in the knative-sources namespace
     name: gcp-pubsub-key
     key: key.json
-  googleCloudProject: MY_GCP_PROJECT # Replace this
+  googleCloudProject: PROJECT # Replace this
   topic: testing
   sink:
     apiVersion: eventing.knative.dev/v1alpha1
