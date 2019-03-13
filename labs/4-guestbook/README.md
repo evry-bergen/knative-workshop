@@ -14,16 +14,18 @@ Luckily, Knative allows you to mix and match Knative components with vanilla
 Kubernetes components.
 
 The Redis configuration consists of two parts:
-- `Deployment`: contains a minimal configuration for a single Redis
-instance, named `redis-master`.
-- `Service`: contains a Kubernetes `Service` that finds `redis-master`
-by its name and role labels and routes requests to it. The `REDIS_HOST`
-environment variable in `guestbook.yaml` refers to the name of the `Service`,
-also named `redis-master`, not the name of the `Deployment`.
 
-Note: Don't confuse a Kubernetes `Service` with a Knative `Service`. A Knative
-`Service` handles the deployment, scaling, and routing for a workload. A
-Kubernetes `Service` routes requests to an existing deployment.
+* `Deployment`: contains a minimal configuration for a single Redis instance,
+  named `redis-master`.
+
+* `Service`: contains a Kubernetes `Service` that finds `redis-master` by its
+  name and role labels and routes requests to it. The `REDIS_HOST` environment
+  variable in `guestbook.yaml` refers to the name of the `Service`, also named
+  `redis-master`, not the name of the `Deployment`.
+
+> Note: Don't confuse a Kubernetes `Service` with a Knative `Service`. A Knative
+> `Service` handles the deployment, scaling, and routing for a workload. A
+> Kubernetes `Service` routes requests to an existing deployment.
 
 Deploy this to you Kubernetes cluster using `kubectl`:
 
@@ -31,28 +33,27 @@ Deploy this to you Kubernetes cluster using `kubectl`:
 kubectl apply -f redis.yaml
 ```
 
-## Build and Deploy the Guestbook Application
+## Deploy the Guestbook Application
 
-Build the app container and publish it to your registry of choice:
+As with the previous lab assignments this too uses the Knative
+[Build][knative-build] and [Serve][knative-serve] components in order to build
+the Guestbook application from soure and running it in one go.
+
+[knative-build]: https://www.knative.dev/docs/build
+[knative-serving]: https://www.knative.dev/docs/serving/
+
+Simply deploy the Guestbook application by running the following command:
 
 ```shell
-REPO=... # "docker.io/{username}" or "gcr.io/{project}"
-# Build and publish the container, run from the root directory.
-docker build --tag "${REPO}/serving/samples/guestbook-redis-go" \
-  serving/samples/guestbook-redis-go
-docker push "${REPO}/serving/samples/guestbook-redis-go"
-# Replace the image reference with our published image.
-perl -pi -e "s@github.com/knative/docs/serving/samples/guestbook-redis-go@${REPO}/serving/samples/guestbook-redis-go@g" serving/samples/guestbook-redis-go/guestbook.yaml
-# Deploy the guestbook Service
-kubectl apply -f serving/samples/guestbook-redis-go/guestbook.yaml
+kubectl apply -f guestbook.yaml
 ```
 
 ## Exploring
 
 Note: the following example uses `curl` to make requests to the application. You
-can also use your browser by following the steps in the
-[routing sample](/serving/samples/knative-routing-go)
-to route requests to `/` to the guestbook `Service`.
+can also use your browser by following the steps in the [routing
+sample](/serving/samples/knative-routing-go) to route requests to `/` to the
+guestbook `Service`.
 
 To access this service, you need to determine its ingress address:
 
