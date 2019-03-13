@@ -266,6 +266,9 @@ template: inverse
 - Route: This abstacts away the complexity similar to kubernetes deployments
 - Service: Can configure the so that one revission gets 50% of the traffic or all of it for instance
 ---
+template: container
+![Default-aligned image](https://raw.githubusercontent.com/evry-bergen/knative-workshop/master/docs/assets/Knative_Model.png)
+---
 .left-column[
   ## How does it work?
   ### - Serving
@@ -418,6 +421,17 @@ This is not a build template but it used a build template
 - Push the container to a registry
 - Deploy the container
 ---
+.left-column[
+  ## How does it work?
+  ### - Serving
+  ### - Build
+]
+.right-column[
+
+![Default-aligned image](https://raw.githubusercontent.com/evry-bergen/knative-workshop/master/docs/assets/Knative_Build.png)
+]
+
+---
 
 .left-column[
   ## How does it work?
@@ -483,6 +497,18 @@ This is not a build template but it used a build template
 - Subscriptions
 
   forward events from channels to service or other channels
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+  ### - Build
+  ### - Pipeline
+  ### - Eventing
+]
+.right-column[
+  ## Knative Eventing
+  ![Default-aligned image](https://raw.githubusercontent.com/evry-bergen/knative-workshop/master/docs/assets/Knative_Eventing.png)
 ]
 ---
 .left-column[
