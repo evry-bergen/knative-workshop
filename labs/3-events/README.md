@@ -178,6 +178,7 @@ For more information about the format of the message, see the
 
 ---
 
+<p align="right"><a href="../4-guestbook">← Lab 4: Knative Guestbook</a></p>
 <p align="left"><a href="../2-build">← Lab 2: Knative Build</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the

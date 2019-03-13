@@ -143,3 +143,24 @@ services outside of the cluster, you'll have to
 Whichever way you go, you can use the guestbook container to test your Redis
 deployment. Just change the `REDIS_HOST` environment variable in
 `guestbook.yaml` to the correct host name.
+
+## Cleaning Up
+
+To remove the Guestbook application and Redis service run the following commands:
+
+```shell
+kubectl delete --filename redis.yaml
+kubectl delete --filename guestbook.yaml
+```
+
+---
+
+<p align="right"><a href="../5-buildpack">← Lab 5: Serverless Runtime</a></p>
+<p align="left"><a href="../2-build">← Lab 3: Knative Events</a></p>
+
+Except as otherwise noted, the content of this page is licensed under the
+[Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
+under the [Apache 2.0 License][apache-2-0].
+
+[cc-by]: https://creativecommons.org/licenses/by/4.0/
+[apache-2-0]: https://www.apache.org/licenses/LICENSE-2.0

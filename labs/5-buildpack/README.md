@@ -104,3 +104,22 @@ pods -w`.
 When the deployment is 4/4 ready, use the DOMAIN shown by `kubectl get ksvc
 lab-5-nodejs` to access the service. This runtime requires POST, for
 example `curl -d '{"name": "Knative"}' http://lab-5-nodejs.default.${PROJECT}.knative.club`.
+
+## Cleaning Up
+
+To remove the the Service run the following command:
+
+```shell
+kubectl delete -f service.yaml
+```
+
+---
+
+<p align="left"><a href="../2-build">← Lab 4: Knative Guestbook</a></p>
+
+Except as otherwise noted, the content of this page is licensed under the
+[Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
+under the [Apache 2.0 License][apache-2-0].
+
+[cc-by]: https://creativecommons.org/licenses/by/4.0/
+[apache-2-0]: https://www.apache.org/licenses/LICENSE-2.0

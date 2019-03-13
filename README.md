@@ -61,6 +61,8 @@ The following Knative components are available:
 1. [Knative Serve](./labs/1-serve)
 2. [Knative Build](./labs/2-build)
 3. [Knative Events](./labs/3-events)
+4. [Knative Guestbook](./labs/4-guestbook)
+5. [Serverless Runtime](./labs/5-buildpack)
 
 ---
 
