@@ -1,0 +1,33 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: guestbook
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      build:
+        apiVersion: build.knative.dev/v1alpha1
+        kind: Build
+        spec:
+          serviceAccountName: build-bot
+          source:
+            git:
+              url: https://github.com/evry-bergen/knative-workshop.git
+              revision: master
+          template:
+            name: kaniko
+            arguments:
+              - name: DOCKERFILE
+                value: ./labs/4-guestbook/Dockerfile
+              - name: IMAGE
+                value: eu.gcr.io/knative-workshop-2019/lab-4-guestbook:latest
+          timeout: 10m
+      revisionTemplate:
+        spec:
+          container:
+            image: eu.gcr.io/knative-workshop-2019/lab-4-guestbook:latest
+            imagePullPolicy: Always
+            env:
+              - name: REDIS_HOST
+                value: redis-master
