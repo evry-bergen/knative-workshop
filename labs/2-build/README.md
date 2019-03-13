@@ -131,12 +131,12 @@ container for the application.
                name: kaniko
                arguments:
                  - name: IMAGE
-                   value: docker.io/{PROJECT}/lab-2-build:latest
+                   value: eu.gcr.io/{PROJECT}/lab-2-build:latest
              timeout: 10m
          revisionTemplate:
            spec:
              container:
-               image: docker.io/{PROJECT}/lab-2-build:latest
+               image: eu.gcr.io/{PROJECT}/lab-2-build:latest
                imagePullPolicy: Always
                env:
                  - name: SIMPLE_MSG
