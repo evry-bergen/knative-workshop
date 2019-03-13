@@ -1,4 +1,4 @@
-# Knative & Istio Workshop
+![Serverless Workshop](./docs/assets/workshop.png)
 
 [Knative][knative] &amp; [Istio][istio] Workshop on Google Cloud for Booster
 2019 Conference.
