@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  INGRESSGATEWAY_IP.xip.io: ""
+kind: ConfigMap
+metadata:
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+    serving.knative.dev/release: devel
+  name: config-domain
+  namespace: knative-serving
