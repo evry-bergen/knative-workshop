@@ -1,10 +1,10 @@
 resource "google_container_node_pool" "nodes" {
   provider = "google-beta"
 
-  name       = "nodes"
-  zone       = "${var.zone}"
-  cluster    = "${google_container_cluster.cluster.name}"
-  node_count = "${var.min_node_count}"
+  name               = "nodes"
+  zone               = "${var.zone}"
+  cluster            = "${google_container_cluster.cluster.name}"
+  initial_node_count = "${var.min_node_count}"
 
   node_config {
     preemptible  = "${var.node_preemptible}"
