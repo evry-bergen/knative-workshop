@@ -89,9 +89,9 @@ the key steps:
 
    ```shell
    $ kubectl apply --filename docker-secret.yaml
-   secret "basic-user-pass" created
+   secret/gcr-auth created
    $ kubectl apply --filename service-account.yaml
-   serviceaccount "build-bot" created
+   serviceaccount/build-bot created
    ```
 
 ## Deploying the sample
