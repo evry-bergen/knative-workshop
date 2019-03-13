@@ -113,7 +113,7 @@ container for the application.
    apiVersion: serving.knative.dev/v1alpha1
    kind: Service
    metadata:
-     name: app-from-source
+     name: lab-2-build
      namespace: default
    spec:
      runLatest:
@@ -131,12 +131,12 @@ container for the application.
                name: kaniko
                arguments:
                  - name: IMAGE
-                   value: docker.io/{PROJECT}/app-from-source:latest
+                   value: eu.grc.io/{PROJECT}/app-from-source:latest
              timeout: 10m
          revisionTemplate:
            spec:
              container:
-               image: docker.io/{PROJECT}/app-from-source:latest
+               image: eu.gcr.io/{PROJECT}/app-from-source:latest
                imagePullPolicy: Always
                env:
                  - name: SIMPLE_MSG
