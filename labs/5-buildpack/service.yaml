@@ -19,7 +19,7 @@ spec:
             name: knative-node10-runtime
             arguments:
             - name: IMAGE
-              value: eu.gcr.io/knative-workshop-2019/lab-5-nodejs
+              value: eu.gcr.io/{PROJECT}/lab-5-nodejs
             - name: DIRECTORY
               value: ./labs/5-buildpack/
             - name: HANDLER
@@ -27,4 +27,4 @@ spec:
       revisionTemplate:
         spec:
           container:
-            image: eu.gcr.io/knative-workshop-2019/lab-5-nodejs:latest
+            image: eu.gcr.io/{PROJECT}/lab-5-nodejs:latest

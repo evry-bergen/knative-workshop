@@ -21,12 +21,12 @@ spec:
               - name: DOCKERFILE
                 value: ./labs/4-guestbook/Dockerfile
               - name: IMAGE
-                value: eu.gcr.io/knative-workshop-2019/lab-4-guestbook:latest
+                value: eu.gcr.io/{PROJECT}/lab-4-guestbook:latest
           timeout: 10m
       revisionTemplate:
         spec:
           container:
-            image: eu.gcr.io/knative-workshop-2019/lab-4-guestbook:latest
+            image: eu.gcr.io/{PROJECT}/lab-4-guestbook:latest
             imagePullPolicy: Always
             env:
               - name: REDIS_HOST
