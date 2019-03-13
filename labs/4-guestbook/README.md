@@ -58,14 +58,14 @@ guestbook `Service`.
 To access this service, you need to determine its ingress address:
 
 ```shell
-kubectl get svc knative-ingressgateway -n istio-system
+kubectl get svc istio-ingressgateway -n istio-system
 ```
 
 When the service is ready, you'll see an IP address in the `EXTERNAL-IP` field:
 
 ```
 NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                                      AGE
-knative-ingressgateway   LoadBalancer   10.23.247.74   35.203.155.229   80:32380/TCP,443:32390/TCP,32400:32400/TCP   2d
+istio-ingressgateway   LoadBalancer   10.23.247.74   35.203.155.229   80:32380/TCP,443:32390/TCP,32400:32400/TCP   2d
 ```
 
 Once the `EXTERNAL-IP` gets assigned to the cluster, you can run:
@@ -74,7 +74,7 @@ Once the `EXTERNAL-IP` gets assigned to the cluster, you can run:
 # Put the host name into an environment variable.
 export SERVICE_HOST=`kubectl get route guestbook -o jsonpath="{.status.domain}"`
 # Put the ingress IP into an environment variable.
-export SERVICE_IP=`kubectl get svc knative-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[*].ip}"`
+export SERVICE_IP=`kubectl get svc istio-ingressgateway -n istio-system -o jsonpath="{.status.loadBalancer.ingress[*].ip}"`
 ```
 
 Now use curl with the service IP as if DNS were properly configured:
