@@ -1,4 +1,4 @@
-# Lab 5: Knative AWS Buildpack
+# Lab 5: Knative Serverless Runtime
 
 The point with FaaS is to focus on what your code is supposed to do, not how it
 is executed. Source-to-URL can be seen as a different definition of the same
