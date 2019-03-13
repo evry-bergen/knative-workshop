@@ -62,8 +62,9 @@ the key steps:
      password: BASE64_ENCODED_KEY
    ```
 
-1. On macOS or Linux computers, use the following command to generate the
-   base64-encoded value required for the manifest:
+1. Use the following command to generate the base64-encoded value required for
+   the manifest and replace the `BASE64_ENCODED_KEY` placeholder in the
+   `docker-secret.yaml` file:
 
    ```shell
    cat account.json | base64 -w 0
