@@ -113,7 +113,7 @@ container for the application.
    apiVersion: serving.knative.dev/v1alpha1
    kind: Service
    metadata:
-     name: app-from-source
+     name: lab-2-build
      namespace: default
    spec:
      runLatest:
@@ -131,12 +131,12 @@ container for the application.
                name: kaniko
                arguments:
                  - name: IMAGE
-                   value: eu.grc.io/{PROJECT}/app-from-source:latest
+                   value: docker.io/{PROJECT}/lab-2-build:latest
              timeout: 10m
          revisionTemplate:
            spec:
              container:
-               image: eu.gcr.io/{PROJECT}/app-from-source:latest
+               image: docker.io/{PROJECT}/lab-2-build:latest
                imagePullPolicy: Always
                env:
                  - name: SIMPLE_MSG
@@ -148,21 +148,21 @@ container for the application.
    ```shell
    # Apply the manifest
    $ kubectl apply --filename service.yaml
-   service "app-from-source" created
+   service "lab-2-build" created
 
    # Watch the pods for build and serving
    $ kubectl get pods --watch
    NAME                          READY     STATUS       RESTARTS   AGE
-   app-from-source-00001-zhddx   0/1       Init:2/3     0          7s
-   app-from-source-00001-zhddx   0/1       PodInitializing   0         37s
-   app-from-source-00001-zhddx   0/1       Completed   0         38s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   0/3       Pending   0         0s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   0/3       Pending   0         0s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   0/3       Init:0/1   0         0s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   0/3       Init:0/1   0         2s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   0/3       PodInitializing   0         3s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   2/3       Running   0         6s
-   app-from-source-00001-deployment-6d6ff665f9-xfhm5   3/3       Running   0         11s
+   lab-2-build-00001-zhddx       0/1       Init:2/3     0          7s
+   lab-2-build-00001-zhddx       0/1       PodInitializing   0         37s
+   lab-2-build-00001-zhddx       0/1       Completed   0         38s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   0/3       Pending   0         0s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   0/3       Pending   0         0s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   0/3       Init:0/1   0         0s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   0/3       Init:0/1   0         2s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   0/3       PodInitializing   0         3s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   2/3       Running   0         6s
+   lab-2-build-00001-deployment-6d6ff665f9-xfhm5   3/3       Running   0         11s
    ```
 
   > **Note:** If the build pod never reaches Completed status and terminates
@@ -177,7 +177,7 @@ container for the application.
    status block:
 
    ```shell
-   $ kubectl get ksvc app-from-source --output yaml
+   $ kubectl get ksvc lab-2-build --output yaml
 
    [...]
    status:
@@ -191,14 +191,14 @@ container for the application.
      - lastTransitionTime: 2019-03-11T20:50:56Z
        status: "True"
        type: Ready
-     domain: app-from-source.default.{PROJECT}.knative.club
-     latestCreatedRevisionName: app-from-source-00007
-     latestReadyRevisionName: app-from-source-00007
+     domain: lab-2-build.default.{PROJECT}.knative.club
+     latestCreatedRevisionName: lab-2-build-00007
+     latestReadyRevisionName: lab-2-build-00007
      observedGeneration: 10
      traffic:
-     - configurationName: app-from-source
+     - configurationName: lab-2-build
       percent: 100
-       revisionName: app-from-source-00007
+       revisionName: lab-2-build-00007
    ```
 
 1. Now that your service is created, Knative will perform the following steps:
@@ -224,16 +224,16 @@ container for the application.
 1. To find the URL for your service, type:
 
    ```shell
-   $ kubectl get ksvc app-from-source  --output=custom-columns=NAME:.metadata.name,DOMAIN:.status.domain
+   $ kubectl get ksvc lab-2-build  --output=custom-columns=NAME:.metadata.name,DOMAIN:.status.domain
    NAME                DOMAIN
-   app-from-source     app-from-source.default.{PROJECT}.knative.club
+   lab-2-build         lab-2-build.default.{PROJECT}.knative.club
    ```
 
 1. Now you can make a request to your app to see the result. Replace
    `{IP_ADDRESS}` with the address that you got in the previous step:
 
    ```shell
-   curl -H "Host: app-from-source.default.{PROJECT}.knative.club" http://{IP_ADDRESS}
+   curl -H "Host: lab-2-build.default.{PROJECT}.knative.club" http://{IP_ADDRESS}
    Hello from the sample app!"
    ```
 
