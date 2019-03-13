@@ -1,26 +1,26 @@
-resource "google_service_account" "gcr_sa" {
-  account_id   = "gcr-sa"
-  display_name = "Container Registry Service Account"
+resource "google_service_account" "knative_build_sa" {
+  account_id   = "knative-build"
+  display_name = "Knative Build Service Account"
   project      = "${var.google_project}"
 }
 
-resource "google_project_iam_member" "gcr_sa" {
+resource "google_project_iam_member" "knative_build_sa" {
   role    = "roles/editor"
-  member  = "serviceAccount:${google_service_account.gcr_sa.account_id}@${var.google_project}.iam.gserviceaccount.com"
+  member  = "serviceAccount:${google_service_account.knative_build_sa.account_id}@${var.google_project}.iam.gserviceaccount.com"
   project = "${var.google_project}"
 }
 
-resource "google_service_account_key" "gcr_sa" {
-  service_account_id = "${google_service_account.gcr_sa.name}"
+resource "google_service_account_key" "knative_build_sa" {
+  service_account_id = "${google_service_account.knative_build_sa.name}"
 }
 
-output "gcr_sa_id" {
-  value     = "${google_service_account.gcr_sa.account_id}@${var.google_project}.iam.gserviceaccount.com"
+output "knative_build_sa_id" {
+  value     = "${google_service_account.knative_build_sa.account_id}@${var.google_project}.iam.gserviceaccount.com"
   sensitive = true
 }
 
-output "gcr_sa_key" {
-  value     = "${google_service_account_key.gcr_sa.private_key}"
+output "knative_build_sa_key" {
+  value     = "${google_service_account_key.knative_build_sa.private_key}"
   sensitive = true
 }
 
@@ -36,7 +36,7 @@ resource "kubernetes_secret" "knative_registry_creds" {
 
   data {
     username = "_json_key"
-    password = "${base64decode("${google_service_account_key.gcr_sa.private_key}")}"
+    password = "${base64decode("${google_service_account_key.knative_build_sa.private_key}")}"
   }
 
   type = "kubernetes.io/basic-auth"

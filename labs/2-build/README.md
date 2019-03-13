@@ -26,7 +26,7 @@ the key steps:
    ```bash
    export PROJECT=$(gcloud config get-value project)
    export ACCOUNT_NAME=knative-build
-   gcloud iam service-accounts create ${ACCOUNT_NAME} --display-name="Knative build account"
+   gcloud iam service-accounts create ${ACCOUNT_NAME} --display-name="Knative Build Service Account"
    ```
 
 1. Grant the new Service Account the `roles/storage.admin` IAM role in order to
