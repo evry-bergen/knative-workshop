@@ -229,15 +229,9 @@ https://istio.io/docs/concepts/what-is-istio/
 ???
 https://www.knative.dev/docs/
 ---
-.left-column[
-  ## Kubernetes
-  ## Istio
-  ## Knative
-]
-.right-column[
-  Knative is designed for different personas:
-  ![Knative Architecture Overview](https://www.knative.dev/docs/images/knative-audience.svg)
-]
+## Audience
+Knative is designed for different personas:
+![Knative Architecture Overview](https://www.knative.dev/docs/images/knative-audience.svg)
 ???
 https://www.knative.dev/docs/
 ---
@@ -245,14 +239,39 @@ template: inverse
 
 ## How does it work, then?
 ---
-name: how
+.left-column[
+  ## How does it work?
+]
+.right-column[
+  Knative provides following Custom Resource Definitions:
 
+- `Configuration`
+
+  The desired state for your service in code and configuration
+
+- `Revision`
+
+  Represents an immutable snapshot of code and configuration
+
+- `Route`
+
+  Assign traffic to a revisions of your service
+
+- `Service`
+
+  The combined lite version of all the objects above
+]
+???
+- Revision: This will let you do canarie deployment
+- Route: This abstacts away the complexity similar to kubernetes deployments
+- Service: Can configure the so that one revission gets 50% of the traffic or all of it for instance
+---
 .left-column[
   ## How does it work?
   ### - Serving
 ]
 .right-column[
-
+  ## Knative Serving
   Knative Serving supports deploying and serving of serverless applications and
   functions to enable:
 
@@ -264,10 +283,61 @@ name: how
 
 - point-in-time snapshot
 
-  ![Knative Serving Overview](https://raw.githubusercontent.com/knative/serving/master/docs/spec/images/object_model.png)
 ]
 ???
 https://www.knative.dev/docs/serving/
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+]
+.right-column[
+  ## Serving Overview
+  ![Knative Serving Overview](https://raw.githubusercontent.com/knative/serving/master/docs/spec/images/object_model.png)
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+]
+.right-column[
+  ## Knative Serving (`Service`)
+  ```yaml
+apiVersion: "serving.knative.dev/v1alpha1"
+kind: "Service"
+metadata:
+    name: "helloworld-go"
+    namespace: "default"
+spec:
+    runLatest:
+        configuration:
+            revisionTemplate:
+                spec:
+                    container:
+                        image: "gcr.io/myrepo/helloworld-go"
+```
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+]
+.right-column[
+  ## Knative Serving (`Route`)
+  ```yaml
+apiVersion: "serving.knative.dev/v1alpha1"
+kind: "Route"
+metadata:
+  name: "blue-green-demo"
+  namespace: "default"
+spec:
+  traffic:
+    - revisionName: "blue-green-00001"
+      percent: 50
+    - revisionName: "blue-green-00002"
+      percent: 50
+  ```
+]
 ---
 .left-column[
   ## How does it work?
@@ -276,9 +346,79 @@ https://www.knative.dev/docs/serving/
 ]
 .right-column[
   ## Knative Build
-  Converting source packages into runnable containers.
+  Provides primitives to run on-cluser container builds from source.
+
+- Build can include multiple steps where each step spesifies a Builder
+
+- Builder is a type of container image that you create to accomplish any task.
+  That means it can be a single step in the process or the hole thing.
+
+- The steps in a Build  can push to a repository
+
+- A BuildTemplate can be used to define reuseable templates
+
+- A ServiceAccount is a Kubernetes Secret which is used for auth
 ]
 ---
+.left-column[
+  ## How does it work?
+  ### - Serving
+  ### - Build
+]
+.right-column[
+  ## Knative Build
+
+  Knative Build uses init-containers to chain the buildsteps together. Each
+  step runs in its own container and is sepertely logged.
+
+  Examples are:
+
+- Kaniko
+
+- Buildpack
+
+- Buildkit
+
+- ... or you can even create your own!
+
+Templates can be found on
+[github.com/knative/build-templates](https://github.com/knative/build-templates)
+]
+???
+Init containers that have an end so they don't run all the time.
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+  ### - Build
+]
+.right-column[
+  ```yaml
+apiVersion: build.knative.dev/v1alpha1
+kind: Build
+metadata:
+  name: "example-build"
+spec:
+  source:
+    git:
+      url: "git://github.com/myrepo/hello.git"
+      revision: "master"
+  template:
+    name: "dockerfile-build-and-push"
+    arguments:
+      - name "IMAGE"
+        value: "gcr.io/myrepo/helloworld-go"
+```
+]
+???
+This is not a build template but it used a build template
+
+- Pull code from a repository
+- Build the image from this source
+- Push the container to a registry
+- Deploy the container
+---
+
 .left-column[
   ## How does it work?
   ### - Serving
@@ -300,8 +440,49 @@ https://www.knative.dev/docs/serving/
 ]
 .right-column[
   ## Knative Eventing
-  Composing services and compute resources via events to build staged event
-  driven architectures.
+
+  Knative Eventing provides a way to consume and produce events. The goal of
+  Eventing is to define common composeble primitives to enable late-binding
+  event sources and event consumers.
+
+  Knative follows the following principles:
+
+  1. Services are loosely coupled during development and deployed independently
+  on a variety of platforms( Kubernetes, VMs Saas or FaaS).
+
+  2. A producer can generate events before a consumer is listening, and consumer
+  can express an interest in a event or class of events that is not yet
+  produced.
+
+  3. Services can be connected to create new applications
+
+  - without modifying producer or consumer
+
+  - with the ability to select a spesific subset of events from a particular
+  producer
+]
+---
+.left-column[
+  ## How does it work?
+  ### - Serving
+  ### - Build
+  ### - Pipeline
+  ### - Eventing
+]
+.right-column[
+  ## Knative Eventing
+
+- Event Sources
+
+  generate events from different sources(k8s, github and pub/sub, container)
+
+- Channels
+
+  buffer between event producers and consumers
+
+- Subscriptions
+
+  forward events from channels to service or other channels
 ]
 ---
 .left-column[
