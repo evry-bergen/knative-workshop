@@ -155,7 +155,7 @@ kubectl delete --filename guestbook.yaml
 
 ---
 
-<p align="right"><a href="../5-buildpack">← Lab 5: Serverless Runtime</a></p>
+<p align="right"><a href="../5-buildpack">Lab 5: Serverless Runtime →</a></p>
 <p align="left"><a href="../2-build">← Lab 3: Knative Events</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
