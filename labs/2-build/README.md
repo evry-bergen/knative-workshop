@@ -66,7 +66,7 @@ the key steps:
    base64-encoded value required for the manifest:
 
    ```shell
-   $ cat account.json | base64 -w 0
+   cat account.json | base64 -w 0
    ```
 
    > **Note:** If you receive the "invalid option -w" error on macOS, try using
@@ -87,9 +87,9 @@ the key steps:
 1. After you have created the manifest files, apply them to your cluster with `kubectl`:
 
    ```shell
-   $ kubectl apply --filename docker-secret.yaml
+   kubectl apply --filename docker-secret.yaml
    secret/gcr-auth created
-   $ kubectl apply --filename service-account.yaml
+   kubectl apply --filename service-account.yaml
    serviceaccount/build-bot created
    ```
 
@@ -146,11 +146,11 @@ container for the application.
 
    ```shell
    # Apply the manifest
-   $ kubectl apply --filename service.yaml
+   kubectl apply --filename service.yaml
    service "lab-2-build" created
 
    # Watch the pods for build and serving
-   $ kubectl get pods --watch
+   kubectl get pods --watch
    NAME                          READY     STATUS       RESTARTS   AGE
    lab-2-build-00001-zhddx       0/1       Init:2/3     0          7s
    lab-2-build-00001-zhddx       0/1       PodInitializing   0         37s
@@ -176,7 +176,7 @@ container for the application.
    status block:
 
    ```shell
-   $ kubectl get ksvc lab-2-build --output yaml
+   kubectl get ksvc lab-2-build --output yaml
 
    [...]
    status:
@@ -223,7 +223,7 @@ container for the application.
 1. To find the URL for your service, type:
 
    ```shell
-   $ kubectl get ksvc lab-2-build  --output=custom-columns=NAME:.metadata.name,DOMAIN:.status.domain
+   kubectl get ksvc lab-2-build  --output=custom-columns=NAME:.metadata.name,DOMAIN:.status.domain
    NAME                DOMAIN
    lab-2-build         lab-2-build.default.{PROJECT}.knative.club
    ```
