@@ -12,8 +12,8 @@ deployment.
 
 ### Register secrets for Contianer Registry
 
-In order to push the container that is built from source to Docker Hub, register
-a secret in Kubernetes for authentication with Docker Hub.
+In order to push the container that is built from source to Google Contianer Registry, register
+a secret in Kubernetes for authentication with Google Contianer Registry.
 
 There are [detailed instructions][knative-build-auth] available, but these are
 the key steps:
@@ -45,7 +45,7 @@ the key steps:
    gcloud iam service-accounts keys create account.json --iam-account=${ACCOUNT_EMAIL}
    ```
 
-1. Create a new `Secret` manifest, which is used to store your Docker Hub
+1. Create a new `Secret` manifest, which is used to store your Google Contianer Registry
    credentials. Save this file as `docker-secret.yaml`:
 
    ```yaml
@@ -204,7 +204,7 @@ container for the application.
 1. Now that your service is created, Knative will perform the following steps:
 
    - Fetch the revision specified from GitHub and build it into a container
-   - Push the container to Docker Hub
+   - Push the container to Google Contianer Registry
    - Create a new immutable revision for this version of the app.
    - Network programming to create a route, ingress, service, and load balance
      for your app.
