@@ -42,6 +42,47 @@ the Guestbook application from soure and running it in one go.
 [knative-build]: https://www.knative.dev/docs/build
 [knative-serving]: https://www.knative.dev/docs/serving/
 
+Create a new file called `guestbook.yaml` that will represent our Guestbook
+applications:
+
+```yaml
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: guestbook
+  namespace: default
+spec:
+  runLatest:
+    configuration:
+      build:
+        apiVersion: build.knative.dev/v1alpha1
+        kind: Build
+        spec:
+          serviceAccountName: build-bot
+          source:
+            git:
+              url: https://github.com/evry-bergen/knative-workshop.git
+              revision: master
+          template:
+            name: kaniko
+            arguments:
+              - name: DOCKERFILE
+                value: ./labs/4-guestbook/Dockerfile
+              - name: IMAGE
+                value: eu.gcr.io/{PROJECT}/lab-4-guestbook:latest
+          timeout: 10m
+      revisionTemplate:
+        spec:
+          container:
+            image: eu.gcr.io/{PROJECT}/lab-4-guestbook:latest
+            imagePullPolicy: Always
+            env:
+              - name: REDIS_HOST
+                value: redis-master
+```
+
+> Remember to replace the `{PROJECT}` placeholder with your actual Google Cloud project name.
+
 Simply deploy the Guestbook application by running the following command:
 
 ```shell
