@@ -172,7 +172,7 @@ Knative Serving consists of four Custom Resource Definitions (CRD):
 
 What you should do : 
 
-Do changes to the service.yaml. Give it a new name and change `value: "Go Sample v1"` to something else.
+Do changes to the `service.yaml`. Give it a new name and change `value: "Go Sample v1"` to something else.
 
 You should create a `route.yaml` and it should look something like this: 
 
@@ -181,15 +181,16 @@ apiVersion: serving.knative.dev/v1alpha1
 kind: Route
 metadata:
   name: my-application # The name of our route; appears in the URL to access the app
-  namespace: default # The namespace we're working in; also appears in the URL to ac
-cess the app
+  namespace: default # The namespace we're working in; also appears in the URL to access the app
 spec:
   traffic:
   - revisionName: my-application-00001
     percent: 100 # All traffic goes to this revision
 ```
 
+
 Generate traffic and see if you get response from both.
+
 
 
 ## Cleaning up
