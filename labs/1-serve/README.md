@@ -156,6 +156,42 @@ a response.
 
 You've successfully deployed your first application using Knative!
 
+
+## Blue/green deployment (Optional)
+
+Lets see how we can release a new version of our serving. We want to for instance
+route 5% of the traffic to the new instance and gradually increase it if there is no errors.
+When the new release has 100% of the traffic remove the old version. 
+
+Knative Serving consists of four Custom Resource Definitions (CRD):
+
+- Service (service.serving.knative.dev): manages the lifecycle of your workload
+- Route (route.serving.knative.dev): maps a network endpoint to one or more revisions
+- Configuration (configuration.serving.knative.dev): maintains the desired state of your deployment
+- Revision (revision.serving.knative.dev): point in time snapshot of your code and configuration
+
+What you should do : 
+
+Do changes to the service.yaml. Give it a new name and change `value: "Go Sample v1"` to something else.
+
+You should create a `route.yaml` and it should look something like this: 
+
+```yaml
+apiVersion: serving.knative.dev/v1alpha1
+kind: Route
+metadata:
+  name: my-application # The name of our route; appears in the URL to access the app
+  namespace: default # The namespace we're working in; also appears in the URL to ac
+cess the app
+spec:
+  traffic:
+  - revisionName: my-application-00001
+    percent: 100 # All traffic goes to this revision
+```
+
+Generate traffic and see if you get response from both.
+
+
 ## Cleaning up
 
 To remove the sample app from your cluster, delete the service record:
