@@ -57,7 +57,6 @@ the key steps:
        build.knative.dev/docker-0: https://eu.gcr.io
    type: kubernetes.io/basic-auth
    data:
-     # This should just be _json_key
      username: X2pzb25fa2V5
      # Use 'cat account.json | base64' to generate this string
      password: BASE64_ENCODED_KEY
