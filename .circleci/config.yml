@@ -279,7 +279,7 @@ jobs:
       - run:
           name: gcloud scale cluster
           command: |
-            gcloud container clusters resize ${GKE_CLUSTER_NAME} --size 1
+            gcloud container clusters resize ${GKE_CLUSTER_NAME} --size 1 || exit 0
 
 workflows:
   version: 2
