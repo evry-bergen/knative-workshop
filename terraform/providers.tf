@@ -4,15 +4,14 @@ provider "google-beta" {
   zone    = "${var.google_zone}"
 }
 
+data "google_client_config" "current" {}
+
 provider "kubernetes" {
   host = "${module.gke.host}"
 
-  #username = "${var.cluster_username}"
-  #password = "${var.cluster_password}"
-
-  client_certificate     = "${base64decode(module.gke.client_certificate)}"
-  client_key             = "${base64decode(module.gke.client_key)}"
   cluster_ca_certificate = "${base64decode(module.gke.cluster_ca_certificate)}"
+  token                  = "${data.google_client_config.current.access_token}"
+  load_config_file       = false
 }
 
 #provider "helm" {
