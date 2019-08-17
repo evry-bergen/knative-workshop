@@ -184,13 +184,6 @@ glcoud_job: &glcoud_job
           --dry-run=${KUBECTL_DRYRUN} || true
 
     - run:
-        name: install istio
-        command: |
-          kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml
-          kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait -f https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
-          kubectl label --overwrite=true --dry-run=${KUBECTL_DRYRUN} namespace default istio-injection=enabled
-
-    - run:
         name: install knative
         command: |
           kubectl apply --overwrite=true --dry-run=${KUBECTL_DRYRUN} --wait \
