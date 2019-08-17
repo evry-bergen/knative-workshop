@@ -29,7 +29,7 @@ Description of files and directories within this directory.
 ```
 $ export GOOGLE_CREDENTIALS $(cat ~/my/path.json | tr -d '\n')
 $ export TERRAFORM_ENVIRONMENT dev
-$ export TERRAFORM_STATE_GCP_BUCKET terraform-state-dev
+$ export TERRAFORM_STATE_GCP_BUCKET knative-workshop-tf-state
 ```
 
 ## Init
