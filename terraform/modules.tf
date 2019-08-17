@@ -22,3 +22,10 @@ module "k8s" {
   region  = "${var.google_region}"
   zone    = "${var.google_zone}"
 }
+
+module "istio" {
+  source = "./modules/istio"
+
+  operator_namespace = "istio-system"
+  operator_version   = "0.0.17"
+}
