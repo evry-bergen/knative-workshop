@@ -14,6 +14,10 @@ resource "google_dns_managed_zone" "knative_site" {
   dns_name    = "knative.site."
   description = "knative.site DNS zone"
   project     = "${var.google_project}"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "google_dns_record_set" "knative_site_booster" {
@@ -37,6 +41,10 @@ resource "google_dns_managed_zone" "knative_club" {
   dns_name    = "knative.club."
   description = "knative.club DNS zone"
   project     = "${var.google_project}"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 output "knative_club_ns" {
@@ -57,6 +65,10 @@ resource "google_dns_record_set" "knative_club_presentation" {
   ]
 
   project = "${var.google_project}"
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "google_dns_record_set" "knative_club_booster" {
