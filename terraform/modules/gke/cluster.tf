@@ -2,7 +2,7 @@ resource "google_container_node_pool" "nodes" {
   provider = "google-beta"
 
   name               = "nodes"
-  zone               = "${var.zone}"
+  location           = "${var.zone}"
   cluster            = "${google_container_cluster.cluster.name}"
   initial_node_count = "${var.min_node_count}"
 
@@ -36,7 +36,7 @@ resource "google_container_cluster" "cluster" {
 
   name                     = "${var.cluster_name}"
   description              = "Primary Kubernetes Cluseter"
-  zone                     = "${var.zone}"
+  location                 = "${var.zone}"
   enable_kubernetes_alpha  = "${var.enable_kubernetes_alpha}"
   enable_legacy_abac       = "${var.enable_legacy_abac}"
   initial_node_count       = "${var.min_node_count}"
