@@ -1,5 +1,5 @@
 variable "helm_version" {
-  default = "v2.11.0"
+  default = "v2.14.3"
 }
 
 variable "google_project" {}
