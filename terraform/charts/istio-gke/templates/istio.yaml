@@ -1,0 +1,20 @@
+apiVersion: istio.banzaicloud.io/v1beta1
+kind: Istio
+metadata:
+  name: {{ include "istio-gke.fullname" . }}
+  labels:
+    controller-tools.k8s.io: "1.0"
+    app.kubernetes.io/name: {{ include "istio-gke.name" . }}
+    helm.sh/chart: {{ include "istio-gke.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  version: "{{ .Values.istio.version }}"
+  mtls: {{ .Values.istio.mtls }}
+  autoInjectionNamespaces:
+    {{- toYaml .Values.istio.autoInjectionNamespaces | nindent 4 }}
+  sidecarInjector:
+    enabled: {{ .Values.istio.sidecarInjector.enabled }}
+    initCNIConfiguration:
+      enabled: {{ .Values.istio.sidecarInjector.initCNIConfiguration.enabled }}
+      binDir: /home/kubernetes/bin

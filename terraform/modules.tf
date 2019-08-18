@@ -26,6 +26,8 @@ module "k8s" {
 module "istio" {
   source = "./modules/istio"
 
-  operator_namespace = "istio-system"
   operator_version   = "0.0.17"
+  operator_namespace = "istio-system"
+  istio_version = "1.2.4"
+  istio_namespace = "istio-system"
 }
