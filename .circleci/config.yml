@@ -96,16 +96,9 @@ lint_job: &lint_job
         command: |
           source $BASH_ENV
           cd terraform
-          if [ $(terraform fmt | grep -v .terraform | tee fmt_result.txt | wc -l) -gt 0 ]; then
-            echo "Terraform files require syntax reformating:"
-            echo
-            cat fmt_result.txt
-            rm fmt_result.txt
-            git checkout -- .
-            echo
-            echo "Please run terraform fmt"
-            exit 1
-          fi
+
+          terraform fmt -check
+          terraform validate
     - *save_repo
 
 plan_job: &plan_job
@@ -122,9 +115,7 @@ plan_job: &plan_job
         command: |
           source $BASH_ENV
           cd terraform
-          terraform plan \
-            -var-file=config/$TERRAFORM_ENVIRONMENT.tfvars \
-            -out=terraform.plan
+          terraform plan -out=terraform.plan
     - run:
         name: tfnotify plan
         command: |
@@ -288,14 +279,14 @@ workflows:
             branches:
               ignore: [master]
 
-      - apply:
-          requires: [plan]
-          filters:
-            branches:
-              only: master
+      #- apply:
+      #    requires: [plan]
+      #    filters:
+      #      branches:
+      #        only: master
 
-      - gcloud_apply:
-          requires: [apply]
+      #- gcloud_apply:
+      #    requires: [apply]
 
   cleanup:
     triggers:
