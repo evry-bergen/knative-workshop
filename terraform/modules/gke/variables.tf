@@ -68,3 +68,4 @@ variable "logging_service" {
   description = "The logging service to use. Can be logging.googleapis.com, logging.googleapis.com/kubernetes (beta) and none"
   default     = "logging.googleapis.com"
 }
+

@@ -1,2 +1,4 @@
 .env
 .terraform
+*.tfstate
+terraform.tfstate.d

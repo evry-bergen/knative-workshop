@@ -1,0 +1,26 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "istio-gateway.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "istio-gateway.name" . }}
+    helm.sh/chart: {{ include "istio-gateway.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  hosts:
+  {{- range .Values.hosts }}
+    - {{ . }}
+  {{- end }}
+  gateways:
+  - {{ include "istio-gateway.fullname" . }}
+  http:
+  - match:
+    - uri:
+        prefix: "{{ Values.service.path }}"
+    route:
+    - destination:
+        host: {{ Values.service.name }}
+        port:
+          number: {{ Values.service.port }}

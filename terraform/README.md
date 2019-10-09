@@ -50,3 +50,12 @@ $ terraform plan -var-file=config/${TERRAFORM_ENVIRONMENT}.tfvars
 ```
 $ terraform apply -var-file=config/${TERRAFORM_ENVIRONMENT}.tfvars
 ```
+
+## Kubernetes Credentials
+
+In order to fetch the credentials to the new Kubernetes cluster run the
+following command:
+
+```
+gcloud container clusters get-credentials knative-workshop --zone europe-north1-a
+```

@@ -1,0 +1,7 @@
+# Default values for istio-bookinfo.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+gateway:
+  selector: ingressgateway
+  hostname: "*"

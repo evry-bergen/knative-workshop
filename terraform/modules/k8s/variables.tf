@@ -9,3 +9,4 @@ variable "region" {
 variable "zone" {
   description = "GCP zone"
 }
+

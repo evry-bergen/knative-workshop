@@ -1,0 +1,45 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "istio-gateway.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "istio-gateway.name" . }}
+    helm.sh/chart: {{ include "istio-gateway.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    istio: {{ .Values.gateway.selector }}
+  servers:
+  {{- if .Values.gateway.http.enabled }}
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    {{- range .Values.hosts }}
+      - {{ . }}
+    {{- end }}
+    {{- if .Values.gateway.http.httpsRedirect }}
+    tls:
+      httpsRedirect: true
+    {{- end }}
+  {{- end }}
+  {{- if .Values.gateway.https.enabled }}
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    {{- range .Values.hosts }}
+      - {{ . }}
+    {{- end }}
+    tls:
+      mode: SIMPLE
+      {{- if .Values.gateway.https.secretName }}
+      credentialName: {{ .Values.gateway.https.secretName  }}
+      {{- else }}
+      credentialName: {{ template "istio-gateway.fullname" . }}
+      {{- end }}
+  {{- end }}

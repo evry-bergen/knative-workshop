@@ -1,0 +1,25 @@
+# Default values for istio-gateway.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+hosts: []
+#  - example.com
+
+gateway:
+  selector: ingressgateway
+
+  http:
+    enabled: true
+    httpsRedirect: false
+
+  https:
+    enabled: false
+    # credentialName:
+
+    certmanager:
+      enabled: false
+
+service:
+  # name: my-service
+  port: 80
+  path: /

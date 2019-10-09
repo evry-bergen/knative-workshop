@@ -6,7 +6,7 @@ resource "kubernetes_service_account" "tiller" {
 }
 
 resource "kubernetes_cluster_role_binding" "tiller" {
-  depends_on = ["kubernetes_service_account.tiller"]
+  depends_on = [kubernetes_service_account.tiller]
 
   metadata {
     name = "tiller"
@@ -30,3 +30,4 @@ resource "kubernetes_cluster_role_binding" "tiller" {
     name      = "cluster-admin"
   }
 }
+

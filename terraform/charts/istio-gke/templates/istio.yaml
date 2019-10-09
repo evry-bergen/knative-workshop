@@ -15,6 +15,28 @@ spec:
     {{- toYaml .Values.istio.autoInjectionNamespaces | nindent 4 }}
   sidecarInjector:
     enabled: {{ .Values.istio.sidecarInjector.enabled }}
+    rewriteAppHTTPProbe: {{ .Values.istio.sidecarInjector.rewriteAppHTTPProbe }}
+    autoInjectionPolicyEnabled: {{ .Values.istio.sidecarInjector.autoInjectionPolicyEnabled }}
     initCNIConfiguration:
       enabled: {{ .Values.istio.sidecarInjector.initCNIConfiguration.enabled }}
       binDir: /home/kubernetes/bin
+  gateways:
+    enabled: {{ .Values.istio.gateways.enabled }}
+    ingress:
+      enabled: {{ .Values.istio.gateways.ingress.enabled }}
+      serviceType: "{{ .Values.istio.gateways.ingress.serviceType }}"
+      loadBalancerIP: "{{ .Values.istio.gateways.ingress.loadBalancerIP }}"
+      ports:
+         - port: 15020
+           targetPort: 15020
+           name: status-port
+         - port: 80
+           targetPort: 80
+           name: http2
+           nodePort: 31380
+         - port: 443
+           name: https
+           nodePort: 31390
+         - port: 15443
+           targetPort: 15443
+           name: tls
