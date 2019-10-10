@@ -9,7 +9,7 @@ resource "kubernetes_namespace" "istio_bookinfo" {
 }
 
 resource "null_resource" "istio_wait" {
-  depends_on       = [helm_release.istio]
+  depends_on = [helm_release.istio]
   provisioner "local-exec" {
     command = "sleep 60"
   }

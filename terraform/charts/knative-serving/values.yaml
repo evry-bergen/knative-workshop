@@ -2,48 +2,37 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
+route:
+  domains: []
+  # - domain: example.com
+  # - domain: example.org
+  #   selector:
+  #     app: nonprofit
+  # - domain: svc.cluster.local
+  #   selector:
+  #     app: secret
 
-image:
-  repository: nginx
-  tag: stable
-  pullPolicy: IfNotPresent
+  # domainTemplate specifies the golang text template string to use
+  # when constructing the Knative service's DNS name. The default
+  # value is "{{.Name}}.{{.Namespace}}.{{.Domain}}". And those three
+  # values (Name, Namespace, Domain) are the only variables defined.
+  #
+  # Changing this value might be necessary when the extra levels in
+  # the domain name generated is problematic for wildcard certificates
+  # that only support a single level of domain name added to the
+  # certificate's domain. In those cases you might consider using a value
+  # of "{{.Name}}-{{.Namespace}}.{{.Domain}}", or removing the Namespace
+  # entirely from the template. When choosing a new value be thoughtful
+  # of the potential for conflicts - for example, when users choose to use
+  # characters such as `-` in their service, or namespace, names.
+  # {{.Annotations}} can be used for any customization in the go template if needed.
+  # We strongly recommend keeping namespace part of the template to avoid domain name clashes
+  # Example '{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}.{{.Domain}}'
+  # and you have an annotation {"sub":"foo"}, then the generated template would be {Name}-{Namespace}.foo.{Domain}
+  domainTemplate: "{{.Name}}.{{.Namespace}}.{{.Domain}}"
 
-nameOverride: ""
-fullnameOverride: ""
-
-service:
-  type: ClusterIP
-  port: 80
-
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+  # tagTemplate specifies the golang text template string to use
+  # when constructing the DNS name for "tags" within the traffic blocks
+  # of Routes and Configuration.  This is used in conjunction with the
+  # domainTemplate above to determine the full URL for the tag.
+  tagTemplate: "{{.Name}}-{{.Tag}}"

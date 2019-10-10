@@ -48,3 +48,13 @@ module "monitoring" {
   operator_version   = var.prometheus_operator_version
   operator_namespace = var.prometheus_operator_namespace
 }
+
+module "knative" {
+  source = "./modules/knative"
+
+  // Hack to make sure knative is deployed after istio
+  istio_wait_id = module.istio.istio_wait_id
+
+  knative_serving_namespace = "knative-serving"
+  knative_serving_domain    = "workshop.knative.site"
+}
