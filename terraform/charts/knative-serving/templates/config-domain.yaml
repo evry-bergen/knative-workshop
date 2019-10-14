@@ -21,11 +21,13 @@ metadata:
     serving.knative.dev/release: "v0.9.0"
 
 data:
-  _default: |
+  _example: |
     {{- range .Values.route.domains }}
     {{ .domain }}: |
     {{- if .selector }}
       selector:
         {{- toYaml .selector | nindent 8 }}
+    {{- else }}
+
     {{- end }}
     {{- end }}
