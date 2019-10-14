@@ -37,11 +37,9 @@ deploy functions, applications, or containers workloads.
 
 The following Knative components are available:
 
-* [Build][knative-build] - Source-to-container build orchestration
 * [Eventing][knative-eventing] - Management and delivery of events
 * [Serving][knative-serving] - Request-driven compute that can scale to zero
 
-[knative-build]: https://www.knative.dev/docs/build/
 [knative-serving]: https://www.knative.dev/docs/serving/
 [knative-eventing]: https://www.knative.dev/docs/eventing/
 
@@ -49,10 +47,8 @@ The following Knative components are available:
 
 0. [Knative Setup](./labs/0-setup)
 1. [Knative Serve](./labs/1-serve)
-2. [Knative Build](./labs/2-build)
 3. [Knative Events](./labs/3-events)
 4. [Knative Guestbook](./labs/4-guestbook)
-5. [Serverless Runtime](./labs/5-buildpack)
 
 ---
 
