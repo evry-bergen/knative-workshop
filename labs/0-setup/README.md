@@ -151,17 +151,9 @@ Istio][istio-rbac].
 
 The following commands install all available Knative components as well as the
 standard set of observability plugins. To customize your Knative installation,
-see [Performing a Custom Knative Installation](Knative-custom-install.md).
+see [Installing Knative Docs][knative-install].
 
-1. Create the required namespaces for Knative and its dependencies:
-
-   ```bash
-   kubectl create namespace knative-serving
-   kubectl create namespace knative-build
-   kubectl create namespace knative-eventing
-   kubectl create namespace knative-sources
-   kubectl create namespace knative-monitoring
-   ```
+[knative-install]: https://knative.dev/docs/install/
 
 1. Run the `kubectl apply` command to install Knative and its dependencies:
 
