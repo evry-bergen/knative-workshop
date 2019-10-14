@@ -64,7 +64,7 @@ the image accordingly.
 From the directory where the new `service.yaml` file was created, apply the
 configuration:
 
-```bash
+```shell
 kubectl apply --filename service.yaml
 ```
 
@@ -78,7 +78,7 @@ Now that your service is created, Knative will perform the following steps:
 
 You can check that pods are created and all Knative constructs (service, configuration, revision, route) have been deployed : 
 
-```bash
+```shell
 kubectl get pod,ksvc,configuration,revision,route
 NAME                                     URL                                            LATESTCREATED      LATESTREADY        READY   REASON
 service.serving.knative.dev/helloworld   http://helloworld.default.35.228.69.5.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
@@ -94,7 +94,7 @@ route.serving.knative.dev/helloworld   http://helloworld.default.35.228.69.5.xip
 
 To test the service, we need to find the url of the service. 
 
-```bash
+```shell
 kubectl get ksvc
 NAME         URL                                            LATESTCREATED      LATESTREADY        READY   REASON
 helloworld   http://helloworld.default.35.228.69.5.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
@@ -104,7 +104,7 @@ URL consists of `http://{service}.{namespace}.{ip}.xip.no`
 
 Make a request to your service: 
 
-```bash
+```shell
 curl -H "Host: helloworld.default.35.228.69.5.xip.io" http://helloworld.default.35.228.69.5.xip.io
 Hello v1!
 ```
