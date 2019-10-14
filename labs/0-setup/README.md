@@ -186,6 +186,15 @@ see [Installing Knative Docs][knative-install].
    kubectl get pods --namespace knative-monitoring
    ```
 
+1. Setting up domain name for Knative routes:
+
+  ```bash
+  export INGRESSGATEWAY_IP=$(kubectl get svc -n istio-system | grep istio-ingressgateway | awk '{ print $4 }')
+  sed "s/INGRESSGATEWAY_IP/"$INGRESSGATEWAY_IP"/g" knative-domain.yaml | kubectl apply -f -
+  ```
+
+  > This makes it easier to access the exposed services in your browser.
+
 ---
 
 <p align="right"><a href="../1-serve">Lab 1: Knative Serve →</a></p>
