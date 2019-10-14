@@ -1,15 +1,13 @@
-apiVersion: serving.knative.dev/v1alpha1 # Current version of Knative
+apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: helloworld-go # The name of the app
+  name: helloworld # the name of the app
   namespace: default # The namespace the app will use
 spec:
-  runLatest:
-    configuration:
-      revisionTemplate:
-        spec:
-          container:
-            image: gcr.io/knative-samples/helloworld-go # The URL to the image of the app
-            env:
-              - name: TARGET # The environment variable printed out by the sample app
-                value: "Go Sample v1"
+  template:
+    spec:
+      containers:
+        - image: evryace/knative-serving-hello-world-go:0.9.0 # The URL tp the image of the app
+          env:
+            - name: TARGET # The enviroment variable printed out by the sample app
+              value: "Go Sample v1"

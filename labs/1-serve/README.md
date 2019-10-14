@@ -11,7 +11,7 @@ own application if you have an image of it available on [Docker
 Hub][docker-hub], [Google Container Registry][google-gcr], or another container
 image registry.
 
-[helloworld-go]: https://github.com/knative/docs/tree/master/serving/samples/helloworld-go
+[helloworld-go]: https://github.com/knative/docs/tree/master/docs/serving/samples/hello-world/helloworld-go
 [docker-hub]: https://docs.docker.com/docker-hub/repos/
 [google-gcr]: https://cloud.google.com/container-registry/docs/pushing-and-pulling
 
@@ -38,22 +38,22 @@ Create a new file named `service.yaml`, then copy and paste the following
 content into it:
 
 ```yaml
-apiVersion: serving.knative.dev/v1alpha1 # Current version of Knative
+apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: helloworld-go # The name of the app
+  name: helloworld # the name of the app
   namespace: default # The namespace the app will use
 spec:
-  runLatest:
-    configuration:
-      revisionTemplate:
-        spec:
-          container:
-            image: gcr.io/knative-samples/helloworld-go # The URL to the image of the app
-            env:
-              - name: TARGET # The environment variable printed out by the sample app
-                value: "Go Sample v1"
+  template:
+    spec:
+      containers:
+        - image: evryace/knative-serving-hello-world-go:0.9.0 # The URL tp the image of the app
+          env:
+            - name: TARGET # The enviroment variable printed out by the sample app
+              value: "Go Sample v1"
 ```
+
+
 
 If you want to deploy the sample app, leave the config file as-is. If you're
 deploying an image of your own app, update the name of the app and the URL of
@@ -76,83 +76,38 @@ Now that your service is created, Knative will perform the following steps:
 - Automatically scale your pods up and down based on traffic, including to zero
   active pods.
 
+You can check that pods are created and all Knative constructs (service, configuration, revision, route) have been deployed : 
+
+```bash
+kubectl get pod,ksvc,configuration,revision,route
+NAME                                     URL                                            LATESTCREATED      LATESTREADY        READY   REASON
+service.serving.knative.dev/helloworld   http://helloworld.default.35.228.69.5.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
+NAME                                           LATESTCREATED      LATESTREADY        READY   REASON
+configuration.serving.knative.dev/helloworld   helloworld-qlzlj   helloworld-qlzlj   True
+NAME                                            CONFIG NAME   K8S SERVICE NAME   GENERATION   READY   REASON
+revision.serving.knative.dev/helloworld-qlzlj   helloworld    helloworld-qlzlj   1            True
+NAME                                   URL                                            READY   REASON
+route.serving.knative.dev/helloworld   http://helloworld.default.35.228.69.5.xip.io   True
+```
+
 ### Interacting with your app
 
-To see if your app has been deployed succesfully, you need the host URL and IP
-address created by Knative.
+To test the service, we need to find the url of the service. 
 
-Note: If your cluster is new, it can take some time before the service is
-assigned an external IP address.
-
-1. To find the IP address for your service, enter:
-
-```shell
-kubectl get svc istio-ingressgateway --namespace istio-system
-
-NAME                     TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                                      AGE
-istio-ingressgateway     LoadBalancer   10.23.247.74   35.203.155.229   80:32380/TCP,443:32390/TCP,32400:32400/TCP   2d
+```bash
+kubectl get ksvc
+NAME         URL                                            LATESTCREATED      LATESTREADY        READY   REASON
+helloworld   http://helloworld.default.35.228.69.5.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
 ```
 
-Take note of the `EXTERNAL-IP` address.
+URL consists of `http://{service}.{namespace}.{ip}.xip.no`
 
-You can also export the IP address as a variable with the following command:
+Make a request to your service: 
 
-```shell
-export IP_ADDRESS=$(kubectl get svc istio-ingressgateway --namespace istio-system --output 'jsonpath={.status.loadBalancer.ingress[0].ip}')
+```bash
+curl -H "Host: helloworld.default.35.228.69.5.xip.io" http://helloworld.default.35.228.69.5.xip.io
+Hello v1!
 ```
-
-> Note: if you use minikube or a baremetal cluster that has no external load
-> balancer, the `EXTERNAL-IP` field is shown as `<pending>`. You need to use
-> `NodeIP` and `NodePort` to interact your app instead. To get your app's
-> `NodeIP` and `NodePort`, enter the following command:
-
-```shell
-export IP_ADDRESS=$(kubectl get node --output 'jsonpath={.items[0].status.addresses[0].address}'):$(kubectl get svc istio-ingressgateway --namespace istio-system --output 'jsonpath={.spec.ports[?(@.port==80)].nodePort}')
-```
-
-1. To find the host URL for your service, enter:
-
-```shell
-kubectl get ksvc helloworld-go --output=custom-columns=NAME:.metadata.name,DOMAIN:.status.domain
-NAME                DOMAIN
-helloworld-go       helloworld-go.default.example.com
-```
-
-You can also export the host URL as a variable using the following command:
-
-```shell
-export HOST_URL=$(kubectl get ksvc helloworld-go  --output jsonpath='{.status.domain}')
-```
-
-If you changed the name from `helloworld-go` to something else when creating the
-`.yaml` file, replace `helloworld-go` in the above commands with the name you
-entered.
-
-1. Now you can make a request to your app and see the results. Replace
-   `IP_ADDRESS` with the `EXTERNAL-IP` you wrote down, and replace
-   `helloworld-go.default.example.com` with the domain returned in the previous
-   step.
-
-```shell
-curl -H "Host: helloworld-go.default.example.com" http://${IP_ADDRESS}
-Hello World: Go Sample v1!
-```
-
-If you exported the host URL and IP address as variables in the previous
-steps, you can use those variables to simplify your cURL request:
-
-```shell
-curl -H "Host: ${HOST_URL}" http://${IP_ADDRESS}
-Hello World: Go Sample v1!
-```
-
-If you deployed your own app, you might want to customize this cURL request
-to interact with your application.
-
-It can take a few seconds for Knative to scale up your application and return
-a response.
-
-> Note: Add `-v` option to get more detail if the `curl` command failed.
 
 You've successfully deployed your first application using Knative!
 
