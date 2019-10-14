@@ -12,6 +12,11 @@ specifications for Knative on Google Cloud Platform (GCP).
 This guide assumes you are using `bash` in a Mac or Linux environment; some
 commands will need to be adjusted for use in a Windows environment.
 
+> We recommend using the [Google Cloud Shell][gcp-shell] since it has the Google
+> Cloud SDK and `kubectl` already installed!
+
+[gcp-shell]: https://cloud.google.com/shell/
+
 ### Installing the Google Cloud SDK and `kubectl`
 
 1. If you already have `gcloud` installed with `kubectl` version 1.10 or newer,
