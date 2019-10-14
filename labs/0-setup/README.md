@@ -111,24 +111,24 @@ Engine cluster.
 To make sure the cluster is large enough to host all the Knative and Istio
 components, the recommended configuration for a cluster is:
 
-- Kubernetes version 1.11 or later
+- Kubernetes version 1.14 or later
 - 4 vCPU nodes (`n1-standard-4`)
-- Node autoscaling, up to 4 nodes
-- API scopes for `cloud-platform`, `logging-write`, `monitoring-write`, and
-  `pubsub` (if those features will be used)
+- Node autoscaling, up to 10 nodes
+- Istio addon for GKE enabled
 
 1. Create a Kubernetes cluster on GKE with the required specifications:
 
    ```bash
-   gcloud container clusters create $CLUSTER_NAME \
-     --zone=$CLUSTER_ZONE \
-     --cluster-version=1.11.7-gke.12 \
+   gcloud beta container clusters create $CLUSTER_NAME \
+     --addons=HorizontalPodAutoscaling,HttpLoadBalancing,Istio \
      --machine-type=n1-standard-4 \
-     --enable-autoscaling --min-nodes=1 --max-nodes=4 \
+     --cluster-version=latest --zone=$CLUSTER_ZONE \
+     --enable-stackdriver-kubernetes --enable-ip-alias \
+     --enable-autoscaling --min-nodes=1 --max-nodes=10 \
      --enable-autorepair \
-     --scopes=service-control,service-management,compute-rw,storage-ro,cloud-platform,logging-write,monitoring-write,pubsub,datastore \
-     --num-nodes=2
+     --scopes cloud-platform
    ```
+
 1. Grant cluster-admin permissions to the current user:
 
    ```bash
@@ -141,43 +141,6 @@ Admin permissions are required to create the necessary [RBAC rules for
 Istio][istio-rbac].
 
 [istio-rbac]: https://istio.io/docs/concepts/security/rbac/
-
-## Installing Istio
-
-Knative depends on Istio.
-
-1. Install Istio:
-
-   ```bash
-   kubectl create namespace istio-system
-   kubectl apply --filename https://github.com/knative/serving/releases/download/v0.4.0/istio-crds.yaml && \
-   kubectl apply --filename https://github.com/knative/serving/releases/download/v0.4.0/istio.yaml
-   ```
-
-   Note: the resources (CRDs) defined in the `istio-crds.yaml`file are also
-   included in the `istio.yaml` file, but they are pulled out so that the CRD
-   definitions are created first. If you see an error when creating resources
-   about an unknown type, run the second `kubectl apply` command again.
-
-1. Label the default namespace with `istio-injection=enabled`:
-
-   ```bash
-   kubectl label namespace default istio-injection=enabled --overwrite
-   ```
-
-1. Monitor the Istio components until all of the components show a `STATUS` of
-   `Running` or `Completed`:
-
-   ```bash
-   kubectl get pods --namespace istio-system
-   ```
-
-It will take a few minutes for all the components to be up and running; you can
-rerun the command to see the current status.
-
-> Note: Instead of rerunning the command, you can add `--watch` to the above
-> command to view the component's status updates in real time. Use CTRL + C to
-> exit watch mode.
 
 ## Installing Knative
 
@@ -198,43 +161,33 @@ see [Performing a Custom Knative Installation](Knative-custom-install.md).
 1. Run the `kubectl apply` command to install Knative and its dependencies:
 
    ```bash
+   kubectl apply --wait --selector knative.dev/crd-install=true \
+   --filename https://github.com/knative/serving/releases/download/v0.9.0/serving.yaml \
+   --filename https://github.com/knative/eventing/releases/download/v0.9.0/release.yaml \
+   --filename https://github.com/knative/serving/releases/download/v0.9.0/monitoring.yaml
+
    kubectl apply --wait \
-     --filename https://github.com/knative/serving/releases/download/v0.4.0/serving.yaml \
-     --filename https://github.com/knative/serving/releases/download/v0.4.0/monitoring-metrics-prometheus.yaml \
-     --filename https://github.com/knative/build/releases/download/v0.4.0/build.yaml \
-     --filename https://github.com/knative/eventing/releases/download/v0.4.0/release.yaml \
-     --filename https://github.com/knative/eventing/releases/download/v0.4.0/gcp-pubsub.yaml \
-     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/release.yaml \
-     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/gcppubsub.yaml \
-     --filename https://github.com/knative/eventing-sources/releases/download/v0.4.1/message-dumper.yaml \
-     --filename https://raw.githubusercontent.com/knative/serving/v0.4.0/third_party/config/build/clusterrole.yaml \
-     --filename https://raw.githubusercontent.com/knative/build-templates/master/kaniko/kaniko.yaml
+   --filename https://github.com/knative/serving/releases/download/v0.9.0/serving.yaml \
+   --filename https://github.com/knative/eventing/releases/download/v0.9.0/release.yaml \
+   --filename https://github.com/knative/serving/releases/download/v0.9.0/monitoring.yaml
    ```
 
-   Sometimes you get an error message here if so run it again.
+   > Note: the two commands are not complely identical, the first one installs
+   > the Custom Resource Definitions required for Knative using the `--selector`
+   > flag, the second one installs the Knative components itself.
 
 1. Monitor the Knative components until all of the components show a `STATUS` of
    `Running`:
 
-   > Note: the pod `gcppubsub-controller-manager-0` depends on a secret that we will create in a
-   > later lab, until then it the pod status will be `ContainerCreating`
+   > Note: the pod `gcppubsub-controller-manager-0` depends on a secret that we
+   > will create in a later lab, until then it the pod status will be
+   > `ContainerCreating`
 
    ```bash
    kubectl get pods --namespace knative-serving
-   kubectl get pods --namespace knative-build
    kubectl get pods --namespace knative-eventing
-   kubectl get pods --namespace knative-sources
    kubectl get pods --namespace knative-monitoring
    ```
-
-1. Setting up domain name for Knative routes:
-
-  ```bash
-  export INGRESSGATEWAY_IP=$(kubectl get svc -n istio-system | grep istio-ingressgateway | awk '{ print $4 }')
-  sed "s/INGRESSGATEWAY_IP/"$INGRESSGATEWAY_IP"/g" knative-domain.yaml | kubectl apply -f -
-  ```
-
-  > This makes it easier to access the exposed services in your browser.
 
 ---
 
