@@ -81,13 +81,16 @@ You can check that pods are created and all Knative constructs (service, configu
 ```shell
 kubectl get pod,ksvc,configuration,revision,route
 NAME                                     URL                                            LATESTCREATED      LATESTREADY        READY   REASON
-service.serving.knative.dev/helloworld   http://helloworld.default.1.2.3.4.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
+service.serving.knative.dev/helloworld   http://helloworld.default.1.2.3.4.xip.io       helloworld-qlzlj   helloworld-qlzlj   True
+
 NAME                                           LATESTCREATED      LATESTREADY        READY   REASON
 configuration.serving.knative.dev/helloworld   helloworld-qlzlj   helloworld-qlzlj   True
+
 NAME                                            CONFIG NAME   K8S SERVICE NAME   GENERATION   READY   REASON
 revision.serving.knative.dev/helloworld-qlzlj   helloworld    helloworld-qlzlj   1            True
+
 NAME                                   URL                                            READY   REASON
-route.serving.knative.dev/helloworld   http://helloworld.default.1.2.3.4.xip.io   True
+route.serving.knative.dev/helloworld   http://helloworld.default.1.2.3.4.xip.io       True
 ```
 
 ### Interacting with your app
@@ -97,7 +100,7 @@ To test the service, we need to find the url of the service.
 ```shell
 kubectl get ksvc
 NAME         URL                                            LATESTCREATED      LATESTREADY        READY   REASON
-helloworld   http://helloworld.default.1.2.3.4.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
+helloworld   http://helloworld.default.1.2.3.4.xip.io       helloworld-qlzlj   helloworld-qlzlj   True
 ```
 
 URL consists of `http://{service}.{namespace}.{ip}.xip.no`
@@ -105,7 +108,7 @@ URL consists of `http://{service}.{namespace}.{ip}.xip.no`
 Make a request to your service:
 
 ```shell
-curl -H "Host: helloworld.default.1.2.3.4.xip.io" http://helloworld.default.1.2.3.4.xip.io
+curl http://helloworld.default.1.2.3.4.xip.io
 Hello v1!
 ```
 
