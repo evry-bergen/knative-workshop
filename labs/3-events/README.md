@@ -99,7 +99,7 @@ Knative Serving comes with some yaml files to install cluster local gateway.
 First, you'd need to find the version of your Istio via something like this:
 
 ```bash
-k get pod --selector app=istio-ingressgateway -o yaml | grep image
+kubectl get pod --selector app=istio-ingressgateway -o yaml | grep image
 
     image: gke.gcr.io/istio/proxyv2:1.1.13-gke.0
 ```
@@ -248,7 +248,7 @@ service.serving.knative.dev/event-display created
 Last but not least, we need connect Event Display service to Pub/Sub messages
 with a PullSubscription.
 
-Create a [pullsubscription.yaml](./pullsubscription.yaml):
+Create a [event-display-pullsub.yaml](./pullsubscription.yaml):
 
 ```yaml
 apiVersion: pubsub.cloud.run/v1alpha1
@@ -271,7 +271,7 @@ service. In this case, we're using a Knative Service.
 Create the PullSubscription:
 
 ```bash
-kubectl apply -f pullsubscription.yaml
+kubectl apply -f event-display-pullsub.yaml
 
 pullsubscription.pubsub.cloud.run/testing-source-event-display created
 ```
@@ -339,13 +339,13 @@ To clean up what we have done in this lab run the following commands:
 kubectl delete \
   -f event-display-deploy.yaml \
   -f event-display-kscv.yaml \
-  -f pullsubscription.yaml
+  -f event-display-pullsub.yaml
 ```
 
 ---
 
-<p align="right"><a href="../4-guestbook">Lab 4: Knative Guestbook →</a></p>
-<p align="left"><a href="../2-build">← Lab 2: Knative Build</a></p>
+<p align="right"><a href="../4-translation">Lab 4: Translation API →</a></p>
+<p align="left"><a href="../2-rest-api">← Lab 2: REST API</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
 [Creative Commons Attribution 4.0 License][cc-by], and code samples are licensed
