@@ -190,7 +190,6 @@ Service Account and instructions on how to set that up on Google Cloud is
         `google-cloud-key` and `key.json` are default values expected by
         `Channel`, `Topic` and `PullSubscription`.
 
-
 [gcp-knative-pubsub]: https://github.com/google/knative-gcp/tree/master/docs/pubsub
 
 Once you have it setup, you should have a `google-cloud-key` secret in
@@ -330,6 +329,17 @@ magically comes to life when you trigger a new event:
 
 ```
 gcloud pubsub topics publish testing --message="Another event"
+```
+
+## Clean Up
+
+To clean up what we have done in this lab run the following commands:
+
+```
+kubectl delete \
+  -f event-display-deploy.yaml \
+  -f event-display-kscv.yaml \
+  -f pullsubscription.yaml
 ```
 
 ---
