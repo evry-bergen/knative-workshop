@@ -1,0 +1,21 @@
+apiVersion: pubsub.cloud.run/v1alpha1
+kind: PullSubscription
+metadata:
+  name: testing-source-event-display
+spec:
+  topic: testing
+  # mode: CloudEventsBinary, CloudEventsStructured, PushCompatible
+  sink:
+    # apiVersion: v1
+    apiVersion: serving.knative.dev/v1alpha1
+    kind: Service
+    name: event-display
+
+  #secret:
+  #  name: google-cloud-key
+  #  key: key.json
+
+---
+
+# Example gcloud command to send a message:
+# gcloud pubsub topics publish TOPIC_NAME --message '{"message":"hi from the terminal"}'
