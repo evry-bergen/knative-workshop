@@ -76,36 +76,36 @@ Now that your service is created, Knative will perform the following steps:
 - Automatically scale your pods up and down based on traffic, including to zero
   active pods.
 
-You can check that pods are created and all Knative constructs (service, configuration, revision, route) have been deployed : 
+You can check that pods are created and all Knative constructs (service, configuration, revision, route) have been deployed :
 
 ```shell
 kubectl get pod,ksvc,configuration,revision,route
 NAME                                     URL                                            LATESTCREATED      LATESTREADY        READY   REASON
-service.serving.knative.dev/helloworld   http://helloworld.default.35.228.69.5.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
+service.serving.knative.dev/helloworld   http://helloworld.default.1.2.3.4.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
 NAME                                           LATESTCREATED      LATESTREADY        READY   REASON
 configuration.serving.knative.dev/helloworld   helloworld-qlzlj   helloworld-qlzlj   True
 NAME                                            CONFIG NAME   K8S SERVICE NAME   GENERATION   READY   REASON
 revision.serving.knative.dev/helloworld-qlzlj   helloworld    helloworld-qlzlj   1            True
 NAME                                   URL                                            READY   REASON
-route.serving.knative.dev/helloworld   http://helloworld.default.35.228.69.5.xip.io   True
+route.serving.knative.dev/helloworld   http://helloworld.default.1.2.3.4.xip.io   True
 ```
 
 ### Interacting with your app
 
-To test the service, we need to find the url of the service. 
+To test the service, we need to find the url of the service.
 
 ```shell
 kubectl get ksvc
 NAME         URL                                            LATESTCREATED      LATESTREADY        READY   REASON
-helloworld   http://helloworld.default.35.228.69.5.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
+helloworld   http://helloworld.default.1.2.3.4.xip.io   helloworld-qlzlj   helloworld-qlzlj   True
 ```
 
 URL consists of `http://{service}.{namespace}.{ip}.xip.no`
 
-Make a request to your service: 
+Make a request to your service:
 
 ```shell
-curl -H "Host: helloworld.default.35.228.69.5.xip.io" http://helloworld.default.35.228.69.5.xip.io
+curl -H "Host: helloworld.default.1.2.3.4.xip.io" http://helloworld.default.1.2.3.4.xip.io
 Hello v1!
 ```
 
@@ -121,7 +121,7 @@ kubectl delete --filename service.yaml
 
 ---
 
-<p align="right"><a href="../2-build">Lab 2: Knative Build →</a></p>
+<p align="right"><a href="../2-rest-api">Lab 2: REST API →</a></p>
 <p align="left"><a href="../0-setup">← Lab 0: Knative Setup</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
