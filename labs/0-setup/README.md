@@ -200,6 +200,12 @@ see [Installing Knative Docs][knative-install].
   ```bash
   git clone https://github.com/evry-bergen/knative-workshop.git
   ```
+  
+  You can verify that you domain settings has been updated by running the following command:
+  
+  ```bash
+  kubectl get cm config-domain -o yaml -n knative-serving
+  ```
 
 ---
 
