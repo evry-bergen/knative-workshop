@@ -61,6 +61,7 @@ And that it has set up all required resources within the namespaces:
 ```bash
 kubectl get all -n cloud-run-events
 
+
 NAME                              READY   STATUS    RESTARTS   AGE
 pod/controller-5f5b8979dc-tjvnh   1/1     Running   0          28s
 pod/webhook-68cf7498c9-jhbz8      1/1     Running   0          27s
@@ -145,14 +146,14 @@ Service Account and instructions on how to set that up on Google Cloud is
 
 [gcp-sa]: https://console.cloud.google.com/iam-admin/serviceaccounts/project
 
-    1.  Create a new service account named `cloudrunevents-pullsub` with the
+   1.  Create a new service account named `cloudrunevents-pullsub` with the
         following command:
 
         ```shell
         gcloud iam service-accounts create cloudrunevents-pullsub
         ```
 
-    1.  Give that Service Account the `Pub/Sub Editor` role on your Google Cloud
+   1.  Give that Service Account the `Pub/Sub Editor` role on your Google Cloud
         project:
 
         ```shell
@@ -162,7 +163,7 @@ Service Account and instructions on how to set that up on Google Cloud is
           --role roles/pubsub.editor
         ```
 
-    1.  **Optional:** If you plan on using the StackDriver monitoring APIs, also
+   1.  **Optional:** If you plan on using the StackDriver monitoring APIs, also
         give the Service Account the `Monitoring MetricWriter` role on your
         Google Cloud project:
 
@@ -172,7 +173,7 @@ Service Account and instructions on how to set that up on Google Cloud is
         --role roles/monitoring.metricWriter
         ```
 
-    1.  Download a new JSON private key for that Service Account. **Be sure not
+   1.  Download a new JSON private key for that Service Account. **Be sure not
         to check this key into source control!**
 
         ```shell
@@ -180,7 +181,7 @@ Service Account and instructions on how to set that up on Google Cloud is
         --iam-account=cloudrunevents-pullsub@$PROJECT.iam.gserviceaccount.com
         ```
 
-    1.  Create a secret on the kubernetes cluster with the downloaded key:
+   1.  Create a secret on the kubernetes cluster with the downloaded key:
 
         ```shell
         # The secret should not already exist, so just try to create it.
