@@ -106,7 +106,7 @@ sleepingservice-jfmkx-deployment-7d9b967b95-8blhb   1/2     Running             
 sleepingservice-jfmkx-deployment-7d9b967b95-8blhb   2/2     Running             0          3s
 ```
 
-#Clean up
+# Clean up
 
 After you're done remember to clean up. 
 ```shell
