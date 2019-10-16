@@ -6,13 +6,13 @@ metadata:
 spec:
   template:
     metadata:
-      name: helloworld-v2
+      name: helloworld-v1
     spec:
       containers:
         - image: evryace/knative-serving-hello-world-go:0.9.0
           env:
             - name: TARGET
-              value: "v2"
+              value: "v1"
   traffic:
   - tag: current
     revisionName: helloworld-v1
