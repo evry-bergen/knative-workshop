@@ -3,6 +3,12 @@
 This guide shows you how to deploy an service using Knative, then interact with it
 using cURL requests.
 
+You must have clone this repository and be in the following directory:
+
+```
+cd labs/1-serve
+```
+
 ## Sample application
 
 This guide uses the [Hello World sample service in Go][helloworld-go] to demonstrate
