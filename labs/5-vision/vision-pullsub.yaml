@@ -1,0 +1,10 @@
+apiVersion: pubsub.cloud.run/v1alpha1
+kind: PullSubscription
+metadata:
+  name: testing-source-vision
+spec:
+  topic: testing
+  sink:
+    apiVersion: serving.knative.dev/v1alpha1
+    kind: Service
+    name: vision

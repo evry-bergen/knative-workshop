@@ -128,7 +128,7 @@ kubectl delete \
 
 ---
 
-<p align="right"><a href="../4-guestbook">Lab 4: Knative Guestbook →</a></p>
+<p align="right"><a href="../5-vision">Lab 5: Vision API →</a></p>
 <p align="left"><a href="../3-events">← Lab 3: Knative Events</a></p>
 
 Except as otherwise noted, the content of this page is licensed under the
