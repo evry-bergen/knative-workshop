@@ -194,6 +194,12 @@ see [Installing Knative Docs][knative-install].
   ```
 
   > This makes it easier to access the exposed services in your browser.
+  
+  If you are running in Google Cloud Shell you will need to clone the repository before you proceede:
+  
+  ```bash
+  git clone https://github.com/evry-bergen/knative-workshop.git
+  ```
 
 ---
 
