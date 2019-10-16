@@ -73,7 +73,7 @@ sleepingservice   http://sleepingservice.default.35.228.69.5.xip.io   sleepingse
 let start the load test with fortio you need to load more then one request per pod to trigger the upscaling
 
 ```shell
- fortio load -t 0 http://fib-knative.default.35.228.69.5.xip.io/1000
+ fortio load -t 0 http://fib-knative.default.35.228.69.5.xip.io
 ```
 
 After a while you should see pods scaling up to 5: 
