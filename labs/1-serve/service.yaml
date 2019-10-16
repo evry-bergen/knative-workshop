@@ -1,13 +1,13 @@
 apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: helloworld # the name of the app
-  namespace: default # The namespace the app will use
+  name: helloworld # the name of the service
+  namespace: default # The namespace the serice will use
 spec:
   template:
     spec:
       containers:
-        - image: evryace/knative-serving-hello-world-go:0.9.0 # The URL tp the image of the app
+        - image: evryace/knative-serving-hello-world-go:0.9.0 # The URL tp the image of the service
           env:
-            - name: TARGET # The enviroment variable printed out by the sample app
+            - name: TARGET # The enviroment variable printed out by the sample service
               value: "Go Sample v1"

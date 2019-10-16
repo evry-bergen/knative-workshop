@@ -1,12 +1,12 @@
 # Lab 1: Knative Serve
 
-This guide shows you how to deploy an app using Knative, then interact with it
+This guide shows you how to deploy an service using Knative, then interact with it
 using cURL requests.
 
 ## Sample application
 
-This guide uses the [Hello World sample app in Go][helloworld-go] to demonstrate
-the basic workflow for deploying an app, but these steps can be adapted for your
+This guide uses the [Hello World sample service in Go][helloworld-go] to demonstrate
+the basic workflow for deploying an application, but these steps can be adapted for your
 own application if you have an image of it available on [Docker
 Hub][docker-hub], [Google Container Registry][google-gcr], or another container
 image registry.
@@ -15,20 +15,20 @@ image registry.
 [docker-hub]: https://docs.docker.com/docker-hub/repos/
 [google-gcr]: https://cloud.google.com/container-registry/docs/pushing-and-pulling
 
-The Hello World sample app reads in an `env` variable, `TARGET`, from the
+The Hello World sample service reads in an `env` variable, `TARGET`, from the
 configuration `.yaml` file, then prints "Hello World: \${TARGET}!". If `TARGET`
 isn't defined, it will print "NOT SPECIFIED".
 
 ## Configuring your deployment
 
-To deploy an app using Knative, you need a configuration `.yaml` file that
+To deploy the service using Knative, you need a configuration `.yaml` file that
 defines a Service. For more information about the Service object, see the
 [Resource Types documentation][knative-service].
 
 [knative-service]: https://github.com/knative/serving/blob/master/docs/spec/overview.md#service
 
 This configuration file specifies metadata about the application, points to the
-hosted image of the app for deployment, and allows the deployment to be
+hosted image of the application for deployment, and allows the deployment to be
 configured. For more information about what configuration options are available,
 see the [Serving spec documentation][knative-serving].
 
@@ -41,15 +41,15 @@ content into it:
 apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
-  name: helloworld # the name of the app
-  namespace: default # The namespace the app will use
+  name: helloworld # the name of the service
+  namespace: default # The namespace the service will use
 spec:
   template:
     spec:
       containers:
-        - image: evryace/knative-serving-hello-world-go:0.9.0 # The URL tp the image of the app
+        - image: evryace/knative-serving-hello-world-go:0.9.0 # The URL tp the image of the service
           env:
-            - name: TARGET # The enviroment variable printed out by the sample app
+            - name: TARGET # The enviroment variable printed out by the sample service
               value: "Go Sample v1"
 ```
 
@@ -59,7 +59,7 @@ If you want to deploy the sample app, leave the config file as-is. If you're
 deploying an image of your own app, update the name of the app and the URL of
 the image accordingly.
 
-## Deploying your app
+## Deploying your service
 
 From the directory where the new `service.yaml` file was created, apply the
 configuration:
