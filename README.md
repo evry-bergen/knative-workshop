@@ -47,8 +47,9 @@ The following Knative components are available:
 
 0. [Knative Setup](./labs/0-setup)
 1. [Knative Serve](./labs/1-serve)
+1. [REST API](./labs/2-rest-api)
 3. [Knative Events](./labs/3-events)
-4. [Knative Guestbook](./labs/4-guestbook)
+4. [Translation API](./labs/4-translation)
 
 ---
 

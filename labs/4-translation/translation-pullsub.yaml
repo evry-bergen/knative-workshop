@@ -1,0 +1,16 @@
+apiVersion: pubsub.cloud.run/v1alpha1
+kind: PullSubscription
+metadata:
+  name: testing-source-translation
+spec:
+  topic: testing
+  # mode: CloudEventsBinary, CloudEventsStructured, PushCompatible
+  sink:
+    # apiVersion: v1
+    apiVersion: serving.knative.dev/v1alpha1
+    kind: Service
+    name: translation
+
+  #secret:
+  #  name: google-cloud-key
+  #  key: key.json
