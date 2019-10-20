@@ -47,6 +47,11 @@ spec:
         - image: docker.io/randax/sleepingservice:v1
 ```
 
+Start it with:
+```shell
+kubectl apply --filename service-v1.yaml
+```
+
 ## Test autoscaling
 Let's send some traffic to our service to see that is scales up. For that we will use [Fortio][fortio-url].
 
@@ -99,6 +104,13 @@ sleepingservice-jfmkx-deployment-7d9b967b95-x9r2m   2/2     Running             
 sleepingservice-jfmkx-deployment-7d9b967b95-nl4k4   1/2     Running             0          3s
 sleepingservice-jfmkx-deployment-7d9b967b95-8blhb   1/2     Running             0          3s
 sleepingservice-jfmkx-deployment-7d9b967b95-8blhb   2/2     Running             0          3s
+```
+
+# Clean up
+
+After you're done remember to clean up. 
+```shell
+kubectl delete --filename service-v1.yaml
 ```
 
 # Extra assignment (Optional)

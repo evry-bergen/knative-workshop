@@ -43,12 +43,10 @@ The following Knative components are available:
 [knative-serving]: https://www.knative.dev/docs/serving/
 [knative-eventing]: https://www.knative.dev/docs/eventing/
 
-## Lab Assignments
-
 0. [Knative Setup](./labs/0-setup)
 1. [Knative Serve](./labs/1-serve)
 3. [Knative Serve autoscale](./labs/2-autoscale)
-4. [Knative Serve Traffic Split](./lab/4-traffic_split)
+4. [Knative Serve Traffic Split](./labs/4-traffic_split)
 5. [Knative Events](./labs/3-events)
 6. [Translation API](./labs/4-translation)
 7. [Vision API](./labs/5-vision)
